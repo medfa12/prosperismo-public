@@ -1,0 +1,18 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\frontend\ProsperismoShell\Prosperismo.Shell\SystemAssets\Rco\RcoContainer.cs"
+             Link="RcoContainer.cs" />
+    <Compile Include="..\..\..\frontend\ProsperismoShell\Prosperismo.Shell\SystemAssets\Audio\VagDecoder.cs"
+             Link="VagDecoder.cs" />
+  </ItemGroup>
+</Project>

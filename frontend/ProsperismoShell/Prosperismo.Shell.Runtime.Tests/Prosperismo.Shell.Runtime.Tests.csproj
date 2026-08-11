@@ -1,0 +1,21 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Prosperismo.Shell.Runtime\Prosperismo.Shell.Runtime.csproj" />
+    <ProjectReference Include="..\Prosperismo.Shell\Prosperismo.Shell.csproj" />
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Headless" />
+    <PackageReference Include="Avalonia.Skia" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+</Project>

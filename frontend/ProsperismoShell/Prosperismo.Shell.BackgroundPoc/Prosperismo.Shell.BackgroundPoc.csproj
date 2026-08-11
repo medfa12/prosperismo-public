@@ -1,0 +1,17 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>BackgroundPoc</AssemblyName>
+    <RootNamespace>Prosperismo.Shell.BackgroundPoc</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Prosperismo.Shell.Runtime\Prosperismo.Shell.Runtime.csproj" />
+  </ItemGroup>
+</Project>

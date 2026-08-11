@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>device/iconid_mic</title>
+    <desc>Created with Sketch.</desc>
+    <g id="device/iconid_mic" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-8" transform="translate(17.000000, 11.000000)" fill="#FFFFFF">
+            <path d="M25.5,23 C25.5,26.86 22.36,30 18.5,30 L11.5,30 C7.64,30 4.5,26.86 4.5,23 L4.5,19 L8.5,19 L8.5,23 C8.5,24.65 9.85,26 11.5,26 L18.5,26 C20.15,26 21.5,24.65 21.5,23 L21.5,19 L25.5,19 L25.5,23 Z M28.5,15 L21.5,15 L21.5,3 C21.5,1.35 20.15,0 18.5,0 L11.5,0 C9.85,0 8.5,1.35 8.5,3 L8.5,15 L1.5,15 C0.948,15 0.5,15.448 0.5,16 L0.5,23 C0.5,29.075 5.425,34 11.5,34 L13,34 L13,38 L8.5,38 C7.4,38 6.5,38.9 6.5,40 C6.5,41.1 7.4,42 8.5,42 L21.5,42 C22.6,42 23.5,41.1 23.5,40 C23.5,38.9 22.6,38 21.5,38 L17,38 L17,34 L18.5,34 C24.575,34 29.5,29.075 29.5,23 L29.5,16 C29.5,15.448 29.052,15 28.5,15 L28.5,15 Z" id="Fill-6"></path>
+        </g>
+    </g>
+</svg>

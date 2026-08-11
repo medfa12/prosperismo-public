@@ -1,0 +1,41 @@
+PlayStation UI assets — status notice
+=====================================
+
+This is NOT a licence grant. It is a disclosure, so that anyone reading this
+repository's licensing metadata knows exactly what these files are.
+
+What the files are
+------------------
+The images under `assets/icons/shell/` and the narrowly selected files under
+`assets/big-picture/` are user-interface, audio, texture, and resource payloads
+taken from the PlayStation 5 system software. They are the work of Sony
+Interactive Entertainment Inc. and remain its property. Each versioned
+`assets/big-picture/<version>/manifest.json` records the retained payloads or
+bounded derivative groups, their source firmware path/container, hashes,
+extraction form, and runtime consumers.
+
+Why they are here
+-----------------
+They are included so the launcher can reproduce the controller labels, Control
+Center pictograms, shell audio, and real-time background inputs that its
+compatibility surfaces require.
+Prosperismo is a non-commercial interoperability and research project.
+
+No permission has been granted
+------------------------------
+Sony Interactive Entertainment has not licensed these files to this project and
+has not authorised their redistribution. Their inclusion is a deliberate
+decision by this project's maintainer, on the view that these particular
+retained assets are necessary for identification, interoperability, and
+behavioural compatibility rather than a substitute distribution of the system
+software.
+
+That is the maintainer's position. It is not a legal opinion, it has not been
+tested, and it may not hold in your jurisdiction.
+
+If you redistribute this repository
+-----------------------------------
+You are relying on your own assessment, not on any permission conveyed here.
+Packagers, distributors and forks that would rather not carry third-party
+assets should delete `assets/icons/shell/` and `assets/big-picture/`. Optional
+shell effects then degrade or fall back; the executable itself remains usable.

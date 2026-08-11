@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="Prosperismo.Shell.App/Prosperismo.Shell.App.csproj" />
+  <Project Path="Prosperismo.Shell/Prosperismo.Shell.csproj" />
+  <Project Path="Prosperismo.Shell.Runtime/Prosperismo.Shell.Runtime.csproj" />
+  <Project Path="Prosperismo.Shell.HLE/Prosperismo.Shell.HLE.csproj" />
+  <Project Path="Prosperismo.Shell.Logging/Prosperismo.Shell.Logging.csproj" />
+  <Project Path="Prosperismo.Shell.ShaderCompiler/Prosperismo.Shell.ShaderCompiler.csproj" />
+  <Project Path="Prosperismo.Shell.ShaderCompiler.Vulkan/Prosperismo.Shell.ShaderCompiler.Vulkan.csproj" />
+  <Project Path="Prosperismo.Shell.Runtime.Tests/Prosperismo.Shell.Runtime.Tests.csproj" />
+  <Project Path="Prosperismo.Shell.Shot/Prosperismo.Shell.Shot.csproj" />
+</Solution>

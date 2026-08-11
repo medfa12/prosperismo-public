@@ -1,0 +1,479 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Prosperismo.GUI"
+             xmlns:controls="clr-namespace:Prosperismo.GUI.Controls"
+             x:Class="Prosperismo.GUI.App"
+             RequestedThemeVariant="Dark">
+
+  <Application.Resources>
+
+    <Color x:Key="SystemAccentColor">#00BAFF</Color>
+
+    <!-- The home shell's dark base is a neutral near-black, rgb(2,4,8), not a
+         tinted one. Kept as a very slight gradient for depth. -->
+    <LinearGradientBrush x:Key="BgBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Offset="0" Color="#070A11" />
+      <GradientStop Offset="0.55" Color="#03050A" />
+      <GradientStop Offset="1" Color="#020408" />
+    </LinearGradientBrush>
+
+    <!-- Accent gradient around the shell focus cyan. Used on the wordmark and
+         primary actions. -->
+    <LinearGradientBrush x:Key="PrismBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#00BAFF" />
+      <GradientStop Offset="1" Color="#6FDCFF" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PrismHoverBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#47D0FF" />
+      <GradientStop Offset="1" Color="#9BE9FF" />
+    </LinearGradientBrush>
+
+    <Color x:Key="Ps.Color.PagePrimary">#FFFFFFFF</Color>
+    <Color x:Key="Ps.Color.PageSecondary">#FFF5F7FA</Color>
+    <Color x:Key="Ps.Color.PageTertiary">#FFEBEEF0</Color>
+    <Color x:Key="Ps.Color.LinkBase">#FF0070CC</Color>
+    <Color x:Key="Ps.Color.LinkHover">#FF0064B7</Color>
+    <Color x:Key="Ps.Color.LinkActive">#FF0059A3</Color>
+    <Color x:Key="Ps.Color.Focus">#FF004C8A</Color>
+    <Color x:Key="Ps.Color.TextPrimary">#FF1F1F1F</Color>
+    <Color x:Key="Ps.Color.TextSecondary">#FF5B6573</Color>
+    <Color x:Key="Ps.Color.Border">#FFD0D7DE</Color>
+    <SolidColorBrush x:Key="Ps.Brush.PagePrimary" Color="{StaticResource Ps.Color.PagePrimary}" />
+    <SolidColorBrush x:Key="Ps.Brush.PageSecondary" Color="{StaticResource Ps.Color.PageSecondary}" />
+    <SolidColorBrush x:Key="Ps.Brush.PageTertiary" Color="{StaticResource Ps.Color.PageTertiary}" />
+    <SolidColorBrush x:Key="Ps.Brush.LinkBase" Color="{StaticResource Ps.Color.LinkBase}" />
+    <SolidColorBrush x:Key="Ps.Brush.LinkHover" Color="{StaticResource Ps.Color.LinkHover}" />
+    <SolidColorBrush x:Key="Ps.Brush.LinkActive" Color="{StaticResource Ps.Color.LinkActive}" />
+    <SolidColorBrush x:Key="Ps.Brush.Focus" Color="{StaticResource Ps.Color.Focus}" />
+    <SolidColorBrush x:Key="Ps.Brush.TextPrimary" Color="{StaticResource Ps.Color.TextPrimary}" />
+    <SolidColorBrush x:Key="Ps.Brush.TextSecondary" Color="{StaticResource Ps.Color.TextSecondary}" />
+    <SolidColorBrush x:Key="Ps.Brush.Border" Color="{StaticResource Ps.Color.Border}" />
+    <LinearGradientBrush x:Key="Ps.Brush.ContentGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Offset="0" Color="#D9F3F3F3" />
+      <GradientStop Offset="1" Color="#D9FFFFFF" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Ps.Brush.AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Offset="0" Color="#0068BD" />
+      <GradientStop Offset="1" Color="#003697" />
+    </LinearGradientBrush>
+
+    <!-- PS5 focus highlight, used for selection borders and focus rings. -->
+    <SolidColorBrush x:Key="FocusBrush" Color="#00BAFF" />
+
+    <!-- Display face for the wordmark alone. Body text stays on Fira Sans;
+         mixing a display face into UI copy is what makes a shell look cheap. -->
+    <FontFamily x:Key="WordmarkFont">avares://Prosperismo.Shell/Assets/Fonts#Bruno Ace</FontFamily>
+
+    <!-- One deterministic, bundled UI family for both Desktop and Big Picture.
+         Platform fallback is only used by Avalonia for codepoints that are not
+         covered by the Latin Fira Sans asset; Latin UI text never depends on a
+         machine-installed font. -->
+    <FontFamily x:Key="ShellFontFamily">avares://Prosperismo.Shell/Assets/Fonts#Fira Sans</FontFamily>
+
+    <SolidColorBrush x:Key="ChromeBrush" Color="#020408" />
+    <!-- Surfaces from the home shell: card rgb(8,10,15), toast rgb(17,20,26),
+         action card rgb(23,25,30). Cards keep a little translucency so the
+         wallpaper glows through, like the home-screen tiles. -->
+    <SolidColorBrush x:Key="CardBrush" Color="#E011141A" />
+    <SolidColorBrush x:Key="CardBorderBrush" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ElevatedBrush" Color="#17191E" />
+    <!-- The option menu and the modal cards ride on the shell's own popup-card
+         surface: rgba(8,10,15,1.0), fully opaque and near-black. Popups are
+         native windows, so translucency here would blend with the desktop
+         rather than the shell; the shell keeps them solid anyway. -->
+    <SolidColorBrush x:Key="OptionSurfaceBrush" Color="#080A0F" />
+    <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#B3FFFFFF" />
+    <SolidColorBrush x:Key="FaintBrush" Color="#99FFFFFF" />
+    <!-- Primary buttons wear the shell focus cyan. -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#00BAFF" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#47D0FF" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#E5484D" />
+    <SolidColorBrush x:Key="DangerHoverBrush" Color="#F2555A" />
+    <SolidColorBrush x:Key="SuccessBrush" Color="#46C46B" />
+    <SolidColorBrush x:Key="InfoBrush" Color="#00BAFF" />
+    <SolidColorBrush x:Key="TileHoverBrush" Color="#14FFFFFF" />
+    <SolidColorBrush x:Key="TileSelectedBrush" Color="#20FFFFFF" />
+
+    <!-- The console's menu rows have one leading gutter, not an icon plus a
+         gap: the sort/filter rows indent their label by exactly 72 and the
+         mark sits centred in that 72 box (paddingLeft 72, sortIconContainer
+         72x72, HOME m259:20683). The mark itself is 40 wide with 16 either
+         side, which is where the 72 comes from (checkmarkContainer, same
+         stylesheet). So the presenter carries no margin of its own. -->
+    <Thickness x:Key="MenuIconPresenterMargin">0,0,0,0</Thickness>
+
+    <ControlTheme x:Key="{x:Type local:SettingRow}" TargetType="local:SettingRow">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel VerticalAlignment="Center" Spacing="2" Margin="0,0,16,0">
+              <TextBlock x:Name="PART_Label" Text="{TemplateBinding Label}" FontSize="13" />
+              <TextBlock Text="{TemplateBinding Description}" FontSize="11"
+                         Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap"
+                         IsVisible="{Binding Description, RelativeSource={RelativeSource TemplatedParent},
+                                     Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+              <ToggleSwitch OnContent="Override" OffContent="Override" MinWidth="0"
+                            VerticalAlignment="Center"
+                            IsVisible="{TemplateBinding ShowOverride}"
+                            IsChecked="{Binding IsOverridden, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+              <ContentPresenter x:Name="PART_Slot" Content="{TemplateBinding Content}" VerticalAlignment="Center" />
+            </StackPanel>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+
+    <Style Selector="Window">
+      <!-- The same bundled family is used by every Avalonia window, including
+           detached dialogs, so Desktop and Big Picture cannot silently drift. -->
+      <Setter Property="FontFamily" Value="{DynamicResource ShellFontFamily}" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{StaticResource CardBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <Style Selector="Border.pill">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="CornerRadius" Value="999" />
+      <Setter Property="Padding" Value="10,3" />
+    </Style>
+
+    <!-- Session status/hotkey badges: the title-id pill geometry with a
+         tinted fill so state (RUNNING) and keys (F11) read at a glance. -->
+    <Style Selector="Border.badge">
+      <Setter Property="CornerRadius" Value="999" />
+      <Setter Property="Padding" Value="8,2" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="Border.badge.running">
+      <Setter Property="Background" Value="#1E46C46B" />
+      <Setter Property="BorderBrush" Value="#5546C46B" />
+    </Style>
+    <Style Selector="Border.badge.key">
+      <Setter Property="Background" Value="#1E58A6FF" />
+      <Setter Property="BorderBrush" Value="#5558A6FF" />
+    </Style>
+
+    <Style Selector="TextBlock.sectionTitle">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="LetterSpacing" Value="1.5" />
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.fieldLabel">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="Margin" Value="0,0,0,6" />
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <!-- Primary action buttons wear the prism gradient. -->
+    <Style Selector="Button.accent">
+      <Setter Property="Background" Value="{StaticResource PrismBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="22,10" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource PrismHoverBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="Button.danger">
+      <Setter Property="Background" Value="{StaticResource DangerBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="22,10" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource DangerHoverBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="Button.ghost">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+
+    <Style Selector="ToggleButton.ghost">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="ToggleButton.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+    <Style Selector="ToggleButton.ghost:checked /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+
+    <!-- Top-level page switcher (Library / Options): plain transparent
+         buttons, not TabItem, so there is no Fluent selected-tab underline.
+         The active page is conveyed by brightness alone; LB/RB gamepad
+         hints flank the pair. -->
+    <Style Selector="Button.segment">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Padding" Value="6,4" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.segment:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+    <Style Selector="Button.segment.active">
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+
+    <!-- Gamepad shoulder-button hint chip (LB/RB, L1/R1). -->
+    <Style Selector="Border.padHint">
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="8,3" />
+    </Style>
+
+    <!-- Option menu. The shell's popup card: opaque near-black rgba(8,10,15),
+         corner radius 16, no scrim, and width bounds of 652 min / 784 max with
+         height bounds 216 / 810 (the shell pins these at its 1920-wide layout;
+         the native option menu additionally measures width from the widest row
+         and clamps to the max). The card keeps a weak white hairline. -->
+
+    <Style Selector="ContextMenu">
+      <Setter Property="Background" Value="{StaticResource OptionSurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="16" />
+      <!-- Vertical padding only: the console's rows run full bleed to the card
+           edge and it is the separator, not the row, that is inset 16. -->
+      <Setter Property="Padding" Value="0,8" />
+      <Setter Property="MinWidth" Value="652" />
+      <Setter Property="MaxWidth" Value="784" />
+      <Setter Property="MinHeight" Value="216" />
+      <Setter Property="MaxHeight" Value="810" />
+      <!-- FontSizePS.SizeNormal. Pixel value UNRESOLVED; see ShellFontSize. -->
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+    <!-- The card sits inside a transparent gutter: it gives the drop shadow
+         somewhere to fall and gives the opening rise 16px of headroom before
+         the popup surface clips it. -->
+    <Style Selector="ContextMenu /template/ Border">
+      <Setter Property="Margin" Value="8,6,8,16" />
+      <Setter Property="BoxShadow" Value="0 8 20 0 #99000000" />
+    </Style>
+
+    <!-- Menu rows follow the shell's menu list rows: 98 px tall, single-line,
+         a 56 px leading icon 16 px in from the card edge with a 20 px gap to
+         the label. (A trailing icon would be a 48 px box at a 16 px inset; no
+         row here carries one.) -->
+    <Style Selector="ContextMenu MenuItem">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+      <Setter Property="Padding" Value="0,0,16,0" />
+      <Setter Property="MinHeight" Value="98" />
+    </Style>
+    <!-- The first row gets 12 px of extra top padding. -->
+    <Style Selector="ContextMenu MenuItem.firstRow">
+      <Setter Property="Padding" Value="0,12,16,0" />
+    </Style>
+    <!-- The 56 px leading icon box. The Min constraints back up the size in
+         case the theme's template sets the box size as a local value. -->
+
+    <Style Selector="ContextMenu MenuItem /template/ ContentControl#PART_IconPresenter">
+      <Setter Property="Width" Value="72" />
+      <Setter Property="Height" Value="72" />
+      <Setter Property="MinWidth" Value="72" />
+      <Setter Property="MinHeight" Value="72" />
+    </Style>
+    <!-- Rows are forced single-line. -->
+    <Style Selector="ContextMenu MenuItem AccessText">
+      <Setter Property="TextWrapping" Value="NoWrap" />
+      <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <!-- The focused row carries no fill, wash or bar of its own: the shell's
+         focus treatment for menu rows is the same travelling focus ring every
+         other surface uses, drawn by its own renderer, so rows stay visually
+         neutral here. -->
+    <Style Selector="ContextMenu MenuItem:selected /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <!-- Keep the composed row colour on focus. The options grammar is uniformly
+         white; destructive weight belongs to its confirmation dialog, not a
+         red menu row. -->
+    <Style Selector="ContextMenu MenuItem:selected /template/ ContentPresenter#PART_HeaderPresenter">
+      <Setter Property="Foreground" Value="{Binding $parent[MenuItem].Foreground}" />
+    </Style>
+    <Style Selector="ContextMenu MenuItem:disabled /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!-- Section header for the global-items section: small type at 0.7
+         opacity, padding 16/4/48/8, never focusable. -->
+
+    <Style Selector="ContextMenu MenuItem.sectionHeader">
+      <Setter Property="MinHeight" Value="40" />
+      <Setter Property="Padding" Value="24,0,0,0" />
+      <Setter Property="Margin" Value="0,16,0,5" />
+      <Setter Property="FontSize" Value="18" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+    </Style>
+    <!-- Headers carry no icon and are not indented by the icon column: the
+         header's 16 px padding is its full inset from the card edge. The
+         theme's row grid shares its icon-column width across rows, so the
+         header text is pulled back across the empty column by exactly the
+         icon box plus its margins (16 + 56 + 20 = 92). -->
+
+    <Style Selector="ContextMenu MenuItem.sectionHeader /template/ ContentPresenter#PART_HeaderPresenter">
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="Margin" Value="-72,0,0,0" />
+    </Style>
+    <Style Selector="ContextMenu MenuItem.sectionHeader /template/ ContentControl#PART_IconPresenter">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- Row separators inset past the leading icon column (16 + 56 + 20 = 92)
+         and 16 from the trailing edge; the separator introducing a section
+         header spans at a flat 16 inset instead. -->
+
+    <Style Selector="ContextMenu Separator">
+      <Setter Property="Background" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="Height" Value="2" />
+      <Setter Property="Margin" Value="16,16,16,0" />
+    </Style>
+    <Style Selector="ContextMenu Separator.sectionBreak">
+      <Setter Property="Margin" Value="16,0" />
+    </Style>
+
+    <!-- The normal launcher owns a compact Qt-style context menu. Popup roots
+         are detached from the desktop visual tree, so this explicit class is
+         the isolation boundary from the console's large option-menu grammar. -->
+    <Style Selector="ContextMenu.desktopContext">
+      <Setter Property="Background" Value="#FF11151D" />
+      <Setter Property="BorderBrush" Value="#4DFFFFFF" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="MinWidth" Value="220" />
+      <Setter Property="MaxWidth" Value="360" />
+      <Setter Property="MinHeight" Value="0" />
+      <Setter Property="MaxHeight" Value="600" />
+      <Setter Property="FontSize" Value="13" />
+    </Style>
+    <Style Selector="ContextMenu.desktopContext /template/ Border">
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="BoxShadow" Value="0 6 18 0 #99000000" />
+    </Style>
+    <Style Selector="ContextMenu.desktopContext MenuItem">
+      <Setter Property="Padding" Value="8,3" />
+      <Setter Property="MinHeight" Value="28" />
+    </Style>
+    <Style Selector="ContextMenu.desktopContext MenuItem /template/ ContentControl#PART_IconPresenter">
+      <Setter Property="Width" Value="0" />
+      <Setter Property="Height" Value="0" />
+      <Setter Property="MinWidth" Value="0" />
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+    <Style Selector="ContextMenu.desktopContext MenuItem:selected /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="#583A80C9" />
+    </Style>
+    <Style Selector="ContextMenu.desktopContext Separator">
+      <Setter Property="Height" Value="1" />
+      <Setter Property="Margin" Value="4,3" />
+    </Style>
+
+    <!-- Modal card: the same action-card surface and BORDER_RADIUS 16 the
+         shell gives its dialogs. -->
+    <Style Selector="Border.ps5Card">
+      <Setter Property="Background" Value="{StaticResource OptionSurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="BoxShadow" Value="0 10 28 0 #A6000000" />
+    </Style>
+
+    <Style Selector="ListBox.console">
+      <Setter Property="Background" Value="#060910" />
+      <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, Courier New, monospace" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="ListBox.console ListBoxItem">
+      <Setter Property="Padding" Value="10,1" />
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+
+    <!-- The library grid used to be a ListBox of padded, lifting, tinted cells.
+         Its styles are gone with it: the All Games surface (ShellAllGames) is
+         the console's own grid, so it owns its own tile chrome, its focus is
+         the one travelling ring the rest of the shell uses, and none of the
+         hover lift, selected fill or rounded cell survives contact with the
+         library app's tile stylesheet. -->
+
+    <!-- The All Games empty-state button. The console's empty grid puts one
+         wide flat button under its two lines of text, sized between 334 and
+         638; the surface sets those bounds itself and this is only the fill. -->
+    <Style Selector="Button.ps5EmptyAction">
+      <Setter Property="Background" Value="#1AFFFFFF" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+    <Style Selector="Button.ps5EmptyAction:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#2AFFFFFF" />
+    </Style>
+
+    <Style Selector="Border.coverClip">
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="ClipToBounds" Value="True" />
+      <Setter Property="Background" Value="{StaticResource ElevatedBrush}" />
+    </Style>
+
+    <!-- Keep the desktop translation last: App.axaml also defines the older
+         shared ghost/card primitives used by Big Picture dialogs. The scoped
+         desktop selectors must win only inside desktopLauncher and
+         psDesktopDialog roots. -->
+    <StyleInclude Source="avares://Prosperismo.Shell/Styles/DesktopLauncher.axaml" />
+  </Application.Styles>
+
+</Application>

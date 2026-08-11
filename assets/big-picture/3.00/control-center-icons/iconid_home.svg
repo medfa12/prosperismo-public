@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>utility/iconid_home</title>
+    <desc>Created with Sketch.</desc>
+    <g id="utility/iconid_home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M51,32.5 C51,31.969 50.789,31.46 50.414,31.085 L33.914,14.585 C33.133,13.805 31.867,13.805 31.086,14.585 L14.586,31.085 C14.211,31.46 14,31.969 14,32.5 L14,50.171 L26.5,50.171 L26.5,40.671 C26.5,37.372 29.2,34.671 32.5,34.671 C35.8,34.671 38.5,37.372 38.5,40.671 L38.5,50.171 L51,50.171 L51,32.5 Z" id="Fill-1" fill="#FFFFFF"></path>
+    </g>
+</svg>

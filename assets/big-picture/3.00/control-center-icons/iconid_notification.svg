@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>utility/iconid_notification</title>
+    <desc>Created with Sketch.</desc>
+    <g id="utility/iconid_notification" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M36.5,48 C36.5,50.485 34.485,52.5 32,52.5 C29.515,52.5 27.5,50.485 27.5,48 L27.5,48 Z M31.995,11.5 C33.651,11.5 35,12.849 35,14.495 L35,14.495 L35,16.408 C39.896,17.729 43.503,22.188 43.503,27.5 L43.503,27.5 L43.5,27.5 L43.5,32.98 C43.5,35.233 44.396,37.396 45.989,38.989 L45.989,38.989 L49.293,42.293 C49.923,42.923 49.477,44 48.586,44 L48.586,44 L15.414,44 C14.523,44 14.077,42.923 14.707,42.293 L14.707,42.293 L18.011,38.989 C19.605,37.396 20.5,35.233 20.5,32.98 L20.5,32.98 L20.5,27.5 C20.503,22.189 24.107,17.732 29,16.41 L29,16.41 L29,14.495 C29,12.849 30.349,11.5 31.995,11.5 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>

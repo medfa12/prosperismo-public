@@ -1,0 +1,995 @@
+﻿<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Prosperismo.GUI"
+        xmlns:controls="clr-namespace:Prosperismo.GUI.Controls"
+        xmlns:shell="clr-namespace:Prosperismo.GUI.SystemAssets.Shell"
+        xmlns:ps5="clr-namespace:Prosperismo.GUI.Ps5Home"
+        xmlns:primitives="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls"
+        x:Class="Prosperismo.GUI.MainWindow"
+        Title="Prosperismo"
+        Width="1280" Height="720"
+        MinWidth="960" MinHeight="540"
+        WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="44"
+        Icon="avares://Prosperismo.Shell/Assets/Prosperismo.ico"
+        KeyDown="OnKeyDown">
+
+  <Grid x:Name="RootLayout" RowDefinitions="Auto,*,Auto">
+
+    <!-- Selected-game backdrop: key art behind the main content, dimmed by
+         a scrim so tiles and text stay readable. Fades on selection. The
+         drifting PS5 hub wallpaper sits underneath as the home backdrop and
+         shows through whenever no game art is up. -->
+    <Panel x:Name="BackdropHost" Grid.Row="1" ClipToBounds="True">
+
+
+      <Border x:Name="ShellField" Background="#020408" />
+      <Image x:Name="BackdropImage" Stretch="UniformToFill" Opacity="0"
+             HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!-- Blurred, like the shell's own blur plate: the key art is meant to
+             read as atmosphere behind the tiles, not as content competing with
+             them. Sharp art at this size fights the UI no matter how hard the
+             scrim above it is pushed. -->
+        <Image.Effect>
+          <BlurEffect Radius="28" />
+        </Image.Effect>
+        <Image.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.35" />
+          </Transitions>
+        </Image.Transitions>
+      </Image>
+
+      <Border x:Name="BackdropScrim" Opacity="{Binding #BackdropImage.Opacity}">
+        <Border.Background>
+          <!-- Key art is dimmed hard, the way the shell does: the tiles and
+               captions have to stay readable on top of it, so the art reads as
+               atmosphere rather than content. Base colour is the shell's own
+               #020408. -->
+          <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Offset="0" Color="#A6020408" />
+            <GradientStop Offset="0.5" Color="#CC020408" />
+            <GradientStop Offset="1" Color="#F0020408" />
+          </LinearGradientBrush>
+        </Border.Background>
+      </Border>
+    </Panel>
+
+    <!-- Title bar; hidden in fullscreen (F11) along with the status bar, so
+         the game gets the whole screen. -->
+    <Grid x:Name="TitleBar" Classes="launcherTitleBar" Grid.Row="0" Height="44" Background="{StaticResource ChromeBrush}">
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="16,0" VerticalAlignment="Center">
+        <Image Source="avares://Prosperismo.Shell/Assets/Prosperismo.ico" Width="20" Height="20"
+               RenderOptions.BitmapInterpolationMode="HighQuality" />
+        <!-- Wordmark carries the prism gradient. -->
+        <TextBlock Text="PROSPERISMO" FontSize="15" VerticalAlignment="Center"
+                   FontFamily="{StaticResource WordmarkFont}"
+                   Foreground="{StaticResource PrismBrush}"
+                   ToolTip.Tip="A prism for Prospero." />
+        <Border Classes="pill">
+          <TextBlock x:Name="VersionText" Text="v0.0.1" FontSize="11" Foreground="{StaticResource MutedBrush}" />
+        </Border>
+      </StackPanel>
+    </Grid>
+
+    <!-- Main content -->
+    <Grid x:Name="MainContent" Grid.Row="1" Margin="32,24,32,20" RowDefinitions="Auto,*,Auto,Auto">
+
+      <!-- The game owns the full client area while running. Session controls
+           use a native popup so they can stay above this native child surface. -->
+      <Border x:Name="GameView" Grid.Row="0" Grid.RowSpan="4" IsVisible="False" Background="#000000" ClipToBounds="True">
+        <Grid x:Name="GameSurfaceContainer" />
+      </Border>
+
+
+      <Grid x:Name="ContentToolbar" Classes="launcherToolbar" Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,20"
+            IsVisible="False">
+        <StackPanel x:Name="PageSwitcher" Grid.Column="0" Orientation="Horizontal" Spacing="14"
+                    VerticalAlignment="Center">
+          <Border x:Name="LeftShoulderHintChip" Classes="padHint" VerticalAlignment="Center">
+            <TextBlock Text="L1" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" />
+          </Border>
+          <Image x:Name="LeftShoulderHintIcon" Height="22" VerticalAlignment="Center" IsVisible="False"
+                 RenderOptions.BitmapInterpolationMode="HighQuality" />
+          <Button x:Name="LibraryTabButton" Classes="segment active" Content="Library" />
+          <Button x:Name="OptionsTabButton" Classes="segment" Content="Options" />
+          <Border x:Name="RightShoulderHintChip" Classes="padHint" VerticalAlignment="Center">
+            <TextBlock Text="R1" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" />
+          </Border>
+          <Image x:Name="RightShoulderHintIcon" Height="22" VerticalAlignment="Center" IsVisible="False"
+                 RenderOptions.BitmapInterpolationMode="HighQuality" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="1" x:Name="LibraryToolbar" Orientation="Horizontal" Spacing="8"
+                    VerticalAlignment="Center" HorizontalAlignment="Right">
+          <TextBox x:Name="SearchBox" Watermark="Search library…" Width="240" VerticalAlignment="Center" />
+          <Button x:Name="AddFolderButton" Classes="ghost" Content="＋ Add folder" VerticalAlignment="Center" />
+          <Button x:Name="RescanButton" Classes="ghost" Content="⟳ Rescan" VerticalAlignment="Center" />
+          <Button x:Name="OpenFileButton" Classes="ghost" Content="Open file…" VerticalAlignment="Center" />
+        </StackPanel>
+
+      </Grid>
+
+      <Panel Grid.Row="1" x:Name="PagesHost">
+
+        <!-- The ordinary launcher has its own responsive surface. It shares
+             MainWindow's GameList/session/settings model, but it never hosts
+             the recovered 1920x1080 HOME canvas below. -->
+        <controls:DesktopLibrarySurface x:Name="DesktopLibrary" IsVisible="False" />
+
+
+        <Viewbox x:Name="ShellBackgroundSurfaceHost" Stretch="Uniform" StretchDirection="Both"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 IsHitTestVisible="False">
+          <Panel Width="1920" Height="1080">
+            <shell:ShellBackground x:Name="HomePlate" GlobalState="NoParticle" />
+          </Panel>
+        </Viewbox>
+
+        <!-- Fixed-surface host. Every number recovered from the shell bundle is
+             authored against a 1920x1080 canvas, so the home is built in those
+             units and the whole plate is scaled uniformly (letterboxed, centred)
+             to whatever the window happens to be. Letting it reflow instead is
+             what breaks every recovered proportion at once.
+
+             A Viewbox rather than a LayoutTransform because the scale factor has
+             to be derived from the available size, and the code-behind hook that
+             a LayoutTransformControl would need does not exist here. -->
+        <Viewbox x:Name="ShellSurfaceHost" Stretch="Uniform" StretchDirection="Both"
+                 HorizontalAlignment="Center" VerticalAlignment="Center">
+
+          <!-- LibraryPage IS the 1920x1080 canvas, deliberately. ApplyHomeScale
+               measures this same element against the shell's 1920 design width,
+               so pinning it to exactly 1920x1080 makes that factor 1.0 and the
+               shell constants land at their authored sizes instead of being
+               scaled a second time inside an already-scaled surface. Do not give
+               this element a variable size. -->
+          <Panel x:Name="LibraryPage" Width="1920" Height="1080">
+
+            <!-- The persistent plate is mounted in the sibling fixed canvas
+                 above. Keeping the Home UI in its own 1920x1080 canvas means
+                 the plate and UI still share the same Viewbox scale while the
+                 plate remains attached when this route is replaced by Settings. -->
+            <!-- SYSTEM_HEIGHT is 126: the top nav owns y 0 to 126, and the
+                 experience row plus the strand take the remainder. -->
+            <Grid x:Name="HomeSurface" RowDefinitions="126,*">
+
+              <!-- Top navigation band, y 0 to 126. Ported from the shell bundle:
+                   the space switcher at content inset 84 on the left, the system
+                   icons and clock at inset 84 on the right, with the glance and
+                   focus behaviour the console gives them. -->
+              <controls:ShellNavBand x:Name="TopNavBand" Grid.Row="0" />
+
+              <!-- The console home has exactly one row of tiles, the experience
+                   switcher, and the installed titles ARE its tiles: a 1920 x 168
+                   band directly under the nav (experienceSwitcherWrapper, HOME
+                   m216), 106 px squares at rest growing to 168 on focus, the
+                   focused one pinned to the 172 inset. The row draws the focused
+                   title beside itself at x 356; nothing else lives in the band.
+                   GameList stays as the selection model behind it. -->
+              <Grid x:Name="LibraryHome" Grid.Row="1" RowDefinitions="168,*">
+
+                <!-- The switcher band, y 126 to 294. Exactly SCALED_EXP_SIZE
+                     tall, full canvas width, and never clipped: tiles left of
+                     the focused one slide out through the inset and are cut off
+                     by the screen edge, not by this container. -->
+                <Border x:Name="StrandHost" Grid.Row="0" Height="168"
+                        ClipToBounds="False" Background="Transparent">
+                  <Border.ContextMenu>
+                    <!-- The shell anchors the option menu to the focused tile (never
+                         the pointer), placed to its right with a flip/fit collision.
+                         PlacementTarget is set to the focused tile's visual from
+                         OnGameContextRequested. Native OptionsMenuPS owns the panel;
+                         recovered managed callers supply one quiet, monochrome list.
+                         Keep only the one section break between title actions and
+                         launcher-global actions, not desktop table rules per row. -->
+                    <controls:ShellContextMenu x:Name="GameContextMenu" />
+                  </Border.ContextMenu>
+
+                  <Panel ClipToBounds="False">
+                    <controls:ShellTileRow x:Name="GameStrand" ClipToBounds="False" />
+
+                    <!-- Empty state -->
+                    <StackPanel x:Name="EmptyState" Spacing="10" HorizontalAlignment="Center"
+                                VerticalAlignment="Center" IsVisible="False">
+                      <TextBlock Text="🎮" FontSize="44" HorizontalAlignment="Center" Opacity="0.7" />
+                      <TextBlock x:Name="EmptyStateTitle" Text="Your library is empty" FontSize="18"
+                                 FontWeight="SemiBold" HorizontalAlignment="Center" />
+                      <TextBlock x:Name="EmptyStateHint" Text="Add a folder containing your games to get started."
+                                 FontSize="13" Foreground="{StaticResource MutedBrush}" HorizontalAlignment="Center" />
+                      <Button x:Name="EmptyAddFolderButton" Classes="accent" Content="＋ Add game folder"
+                              HorizontalAlignment="Center" Margin="0,8,0,0" />
+                    </StackPanel>
+
+                    <!-- Loading state: covers the strand while a scan (initial
+                         load, rescan, or a just-added folder) is in flight, so the
+                         screen never looks blank mid-scan. -->
+                    <StackPanel x:Name="LoadingState" Spacing="14" HorizontalAlignment="Center"
+                                VerticalAlignment="Center" IsVisible="False">
+                      <controls:Ps5BusyIndicator Width="36" Height="36"
+                                                  HorizontalAlignment="Center" />
+                      <controls:Ps5ProgressBar IsIndeterminate="True" Width="180" Height="3" />
+                      <TextBlock x:Name="LoadingStateText" Text="Loading library…" FontSize="13"
+                                 Foreground="{StaticResource MutedBrush}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                  </Panel>
+                </Border>
+              </Grid>
+            </Grid>
+
+            <!-- The focused-title Hub is a sibling of HOME, not a desktop
+                 detail pane beneath the game row. Its resting logo and CTA
+                 remain visible while the title strand owns focus; activating
+                 that title transfers focus into these existing controls.
+                 ShellHubTransition changes focus presentation, not whether
+                 the controls exist. -->
+            <Panel x:Name="GameHubSurface" Margin="0,128,0,0"
+                   IsVisible="False" IsHitTestVisible="False">
+              <!-- NPXS40033 renderHeader is standalone-only. Embedded HOME
+                   already carries the focused title in its switcher; exposing
+                   this header would draw a redundant second game icon. -->
+              <controls:ShellHubHeader x:Name="GameHubHeader" IsVisible="False" />
+              <!-- NPXS40033's logo is a distinct IMAGE_TYPE.LOGO media
+                   channel.  The captured Astro frame places its slot around
+                   canvas (172,530), hence (172,402) under this y=128 Hub
+                   surface.  This is console-video placement, not Figma. -->
+              <controls:ShellGameHubTitleLogo x:Name="GameHubTitleLogo"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Top" />
+              <!-- CTA canvas (172,835) from the captured 1920x1080 Astro
+                   frame, relative to this y=128 Hub surface: y=707.  Width,
+                   button height and gap come from the NPXS40033 contract. -->
+              <controls:ShellGameHubCta x:Name="GameHubCta"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top">
+                <controls:ShellGameHubCta.ContextMenu>
+                  <controls:ShellContextMenu x:Name="GameHubOverflowMenu" />
+                </controls:ShellGameHubCta.ContextMenu>
+              </controls:ShellGameHubCta>
+            </Panel>
+
+            <!-- NPXS40071 Game Library. This is the recovered 5 x 3 installed
+                 grid, hosted on the same native background plate as Home. It
+                 replaces the Home controls while open; the desktop launcher
+                 keeps its existing search/list surface. -->
+            <controls:ShellAllGames x:Name="SonyAllGames"
+                                    Width="1920" Height="1080"
+                                    Title="Game Library"
+                                    IsRegionFocused="False"
+                                    IsVisible="False" />
+
+            <!-- NPXS40015 Search replaces HOME inside the same 1920x1080
+                 route while the persistent BGLayer remains mounted below. -->
+            <controls:ShellSearchSurface x:Name="SonySearch"
+                                         Width="1920" Height="1080"
+                                         IsVisible="False" />
+
+            <!-- Kept as a hidden lifecycle target for the existing shell route;
+                 all visible typography uses the bundled open family declared
+                 in App.axaml. -->
+            <TextBlock x:Name="DumpNotice"
+                       IsVisible="False"
+                       HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                       Margin="96,0,96,54"
+                       MaxWidth="1728"
+                       TextWrapping="Wrap"
+                       Foreground="#FFFFFF" Opacity="0.7" />
+
+            <!-- Selection model behind the strand: every launch / context-menu /
+                 backdrop path still reads GameList.SelectedItem, and the strand
+                 is kept in lockstep with it. Never shown. -->
+            <ListBox x:Name="GameList" IsVisible="False" SelectionMode="Single"
+                     Background="Transparent" BorderThickness="0" />
+          </Panel>
+        </Viewbox>
+
+        <!-- NPXS40008 Settings, kept as a distinct console surface. The first
+             integration slice is the recovered top-level category list; the
+             native SettingsListPS row chrome is intentionally not guessed. -->
+        <Viewbox x:Name="SonySettingsSurfaceHost" Stretch="Uniform" StretchDirection="Both"
+                 HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+          <Panel Width="1920" Height="1080">
+            <!-- NPXS40008's PS5/PPR content is transparent. The persistent
+                 HomePlate mounted in ShellBackgroundSurfaceHost remains
+                 visible underneath this route. -->
+            <controls:ShellSettingsCategoryList x:Name="SonySettingsCategories"
+                                                Width="1920" Height="1080" />
+            <controls:ShellSettingsDetailList x:Name="SonySettingsDetail"
+                                              Width="1920" Height="1080" IsVisible="False" />
+          </Panel>
+        </Viewbox>
+
+        <!-- Options page: sub-tabs so future categories (Graphics, …) slot
+             in next to General. Card-grouped sections match the visual
+             language used by the console panel and launch bar below. -->
+        <Grid x:Name="OptionsPage" IsVisible="False">
+          <TabControl>
+            <TabItem x:Name="GeneralTabItem" Header="General" FontSize="15">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+
+                  <!-- Retained only for migration/source compatibility. The
+                       native backend has no strict/import-trace CLI contract. -->
+                  <Border Classes="card" IsVisible="False">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EmulationSectionTitle" Classes="sectionTitle" Text="EMULATION" />
+
+                      <local:SettingRow x:Name="CpuEngineRow" Label="CPU engine"
+                                        Description="Execution engine used to run game code.">
+                        <ComboBox x:Name="CpuEngineBox" Width="160" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="CpuEngineNativeItem" Content="Native" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="StrictRow" Label="Strict dynlib resolution"
+                                        Description="Fail the launch when an imported symbol cannot be resolved.">
+                        <controls:Ps5ToggleSwitch x:Name="StrictToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="LoggingSectionTitle" Classes="sectionTitle" Text="LOGGING" />
+
+                      <local:SettingRow x:Name="LogLevelRow" Label="Log level" IsVisible="False"
+                                        Description="Verbosity of the emulator console output.">
+                        <ComboBox x:Name="LogLevelBox" Width="160" SelectedIndex="2"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="LogLevelTraceItem" Content="Trace" />
+                          <ComboBoxItem x:Name="LogLevelDebugItem" Content="Debug" />
+                          <ComboBoxItem x:Name="LogLevelInfoItem" Content="Info" />
+                          <ComboBoxItem x:Name="LogLevelWarningItem" Content="Warning" />
+                          <ComboBoxItem x:Name="LogLevelErrorItem" Content="Error" />
+                          <ComboBoxItem x:Name="LogLevelCriticalItem" Content="Critical" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="TraceImportsRow" Label="Import trace limit" IsVisible="False"
+                                        Description="Trace the first N imports per module (0 = off).">
+                        <NumericUpDown x:Name="TraceImportsBox" Width="160" Minimum="0"
+                                       Maximum="4096" Increment="16" Value="0" FormatString="0"
+                                       VerticalAlignment="Center" CornerRadius="8" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="LogToFileRow" Label="Capture process output"
+                                        Description="Mirror the native emulator process output to a host log file.">
+                        <controls:Ps5ToggleSwitch x:Name="LogToFileToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="LogFilePathRow" Label="Log file path"
+                                        Description="No custom path">
+                        <Button x:Name="SelectLogFilePathButton" Classes="ghost" Content="Select…"
+                                VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="OverrideLogFileRow" Label="Override log file"
+                                        Description="Use the exact file path instead of appending title ID and timestamp.">
+                        <controls:Ps5ToggleSwitch x:Name="OverrideLogFileToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="LauncherSectionTitle" Classes="sectionTitle" Text="LAUNCHER" />
+
+                      <local:SettingRow x:Name="LanguageRow" Label="Emulator language"
+                                        Description="Language used throughout the launcher. Applies immediately.">
+                        <ComboBox x:Name="LanguageBox" Width="160"
+                                  VerticalAlignment="Center" CornerRadius="8"
+                                  DisplayMemberBinding="{Binding NativeName}" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="TitleMusicRow" Label="Title music"
+                                        Description="Loop the selected game's preview music in the library.">
+                        <controls:Ps5ToggleSwitch x:Name="TitleMusicToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="ShellMotionRow" Label="Background animation"
+                                        Description="Animate the console hub wallpaper behind the library.">
+                        <controls:Ps5ToggleSwitch x:Name="ShellMotionToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="UiSoundsRow" Label="Menu sounds"
+                                        Description="Play navigation and selection sounds in the launcher.">
+                        <controls:Ps5ToggleSwitch x:Name="UiSoundsToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="ShellMusicRow" Label="Menu music"
+                                        Description="Loop the shell's ambient bed on the home screen.">
+                        <controls:Ps5ToggleSwitch x:Name="ShellMusicToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="BootIntroRow" Label="Boot sequence"
+                                        Description="Play the console boot movie the next time Prosperismo starts.">
+                        <controls:Ps5ToggleSwitch x:Name="BootIntroToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="False" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="DiscordRow" Label="Discord presence"
+                                        Description="Show the running game on your Discord profile.">
+                        <controls:Ps5ToggleSwitch x:Name="DiscordToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="AutoUpdateRow" Label="Check for updates on startup"
+                                        Description="Checks GitHub without delaying startup.">
+                        <controls:Ps5ToggleSwitch x:Name="AutoUpdateToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="AboutSectionTitle"
+                                Classes="sectionTitle"
+                                Text="ABOUT" />
+
+                      <!--Latest commit info-->
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                          <Image Source="avares://Prosperismo.Shell/Assets/commit-icon.png"
+                                    Width="24" Height="24" VerticalAlignment="Center" />
+                          <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock x:Name="LatestCommitLabel" Text="Latest commit" FontSize="13"/>
+                            <TextBlock x:Name="LatestCommitDescription" Text="Latest commit on the main branch" FontSize="11" Foreground="{StaticResource MutedBrush}"/>
+                          </StackPanel>
+                        </StackPanel>
+
+                        <Button Grid.Column="1" x:Name="LatestCommitHashText" Classes="ghost"
+                          Content="Loading…" FontSize="12" FontFamily="Consolas,monospace"
+                          VerticalAlignment="Center" IsEnabled="False" />
+
+                      </Grid>
+
+                      <!--Update-->
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                          <Image Source="avares://Prosperismo.Shell/Assets/update-icon.png"
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center" />
+                          <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock x:Name="UpdateLabel" Text="Updates" FontSize="13" />
+                            <TextBlock x:Name="UpdateStatusText" Text="Current build: dev" FontSize="11"
+                                      Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" />
+                          </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1" x:Name="UpdateButton" Classes="ghost"
+                                Content="Check for updates" VerticalAlignment="Center" />
+                      </Grid>
+
+                      <!--Github-->
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0"
+                                      Orientation="Horizontal"
+                                      Spacing="8"
+                                      VerticalAlignment="Center">
+                          <Image Source="avares://Prosperismo.Shell/Assets/github.png"
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center" />
+                          <StackPanel VerticalAlignment="Center"
+                                          Spacing="2">
+                            <TextBlock x:Name="GithubLabel"
+                                            Text="GitHub"
+                                            FontSize="13" />
+                            <TextBlock x:Name="GithubDesc"
+                                            Text="Source code, issues and project development."
+                                            FontSize="11"
+                                            Foreground="{StaticResource MutedBrush}"
+                                            TextWrapping="Wrap" />
+                          </StackPanel>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                x:Name="GithubButton"
+                                Classes="ghost"
+                                Content="Open"
+                                VerticalAlignment="Center" />
+                      </Grid>
+
+                      <!--Discord-->
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        Spacing="8"
+                                        VerticalAlignment="Center">
+                          <Image Source="avares://Prosperismo.Shell/Assets/discord.png"
+                                  Width="20"
+                                  Height="20"
+                                  VerticalAlignment="Center" />
+                          <StackPanel VerticalAlignment="Center"
+                                      Spacing="2">
+                            <TextBlock x:Name="DiscordServerLabel"
+                                      Text="Discord"
+                                      FontSize="13" />
+                            <TextBlock x:Name="DiscordServerDesc"
+                                      Text="Join the community, get support and follow development."
+                                      FontSize="11"
+                                      Foreground="{StaticResource MutedBrush}"
+                                      TextWrapping="Wrap" />
+                          </StackPanel>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                x:Name="DiscordButton"
+                                Classes="ghost"
+                                Content="Join"
+                                VerticalAlignment="Center" />
+                      </Grid>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <!-- Obsolete managed render-scale switch. It has no native
+                 prosperismo_emulator consumer and must not be presented. -->
+            <TabItem x:Name="GraphicsTabItem" Header="Graphics" FontSize="15" IsVisible="False">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="RenderingSectionTitle" Classes="sectionTitle" Text="RENDERING" />
+
+                      <local:SettingRow x:Name="RenderResolutionRow" Label="Internal resolution"
+                                        Description="Render offscreen targets below native resolution and upscale on present. Lower values trade image quality for GPU headroom; takes effect on next launch.">
+                        <ComboBox x:Name="RenderResolutionBox" Width="160" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="RenderResolution100Item" Content="100% (native)" Tag="1.0" />
+                          <ComboBoxItem x:Name="RenderResolution75Item" Content="75%" Tag="0.75" />
+                          <ComboBoxItem x:Name="RenderResolution50Item" Content="50%" Tag="0.5" />
+                          <ComboBoxItem x:Name="RenderResolution25Item" Content="25%" Tag="0.25" />
+                        </ComboBox>
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <!-- Native emulator configuration. These controls are intentionally
+                 named from EmulatorSettings so the shared desktop/Big Picture
+                 settings controller can bind them without depending on visual
+                 text. Launcher-only settings remain on General. -->
+            <TabItem x:Name="EmulatorEmulationTabItem" Header="Emulation" FontSize="15">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EmulatorEmulationSectionTitle" Classes="sectionTitle" Text="EMULATION" />
+
+                      <local:SettingRow x:Name="EmulatorResolutionRow" Label="Window resolution"
+                                        Description="Native window size used by the emulator on the next launch.">
+                        <ComboBox x:Name="EmulatorResolutionBox" Width="180" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="EmulatorResolution720Item" Content="1280 × 720" Tag="R1280X720" />
+                          <ComboBoxItem x:Name="EmulatorResolution1080Item" Content="1920 × 1080" Tag="R1920X1080" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorVblankFrequencyRow" Label="Vblank frequency"
+                                        Description="Display refresh cadence in Hz. Valid range: 30–360.">
+                        <NumericUpDown x:Name="EmulatorVblankFrequencyBox" Width="180" Minimum="30" Maximum="360"
+                                       Increment="1" Value="60" FormatString="0 Hz" VerticalAlignment="Center" CornerRadius="8" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <TabItem x:Name="EmulatorGraphicsTabItem" Header="Native graphics" FontSize="15">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EmulatorGraphicsSectionTitle" Classes="sectionTitle" Text="GRAPHICS" />
+
+                      <local:SettingRow x:Name="EmulatorVulkanValidationRow" Label="Vulkan validation"
+                                        Description="Enable Vulkan validation layers for native graphics diagnostics.">
+                        <controls:Ps5ToggleSwitch x:Name="EmulatorVulkanValidationToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorShaderValidationRow" Label="Shader validation"
+                                        Description="Validate generated SPIR-V before it is used by the host GPU.">
+                        <controls:Ps5ToggleSwitch x:Name="EmulatorShaderValidationToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorShaderOptimizationRow" Label="Shader optimization"
+                                        Description="Optimization strategy applied when native shaders are prepared.">
+                        <ComboBox x:Name="EmulatorShaderOptimizationBox" Width="180" SelectedIndex="2"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="EmulatorShaderOptimizationNoneItem" Content="None" Tag="None" />
+                          <ComboBoxItem x:Name="EmulatorShaderOptimizationSizeItem" Content="Size" Tag="Size" />
+                          <ComboBoxItem x:Name="EmulatorShaderOptimizationPerformanceItem" Content="Performance" Tag="Performance" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorNggRectlistDrawRow" Label="NGG rect-list draw path"
+                                        Description="Use the NGG rect-list drawing path required by compatible titles.">
+                        <controls:Ps5ToggleSwitch x:Name="EmulatorNggRectlistDrawToggle" OnContent="On" OffContent="Off"
+                                      IsChecked="True" VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <TabItem x:Name="EmulatorDebuggingTabItem" Header="Debugging" FontSize="15">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EmulatorDebuggingSectionTitle" Classes="sectionTitle" Text="DEBUGGING" />
+
+                      <local:SettingRow x:Name="EmulatorCommandBufferDumpRow" Label="Dump command buffers"
+                                        Description="Write submitted command buffers to the configured output folder.">
+                        <controls:Ps5ToggleSwitch x:Name="EmulatorCommandBufferDumpToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorCommandBufferDumpFolderRow" Label="Command-buffer folder"
+                                        Description="Folder used when command-buffer dumping is enabled.">
+                        <TextBox x:Name="EmulatorCommandBufferDumpFolderBox" Width="280" Text="_Buffers"
+                                 VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorRenderDocRow" Label="RenderDoc capture"
+                                        Description="Enable RenderDoc integration for graphics capture on the next launch.">
+                        <controls:Ps5ToggleSwitch x:Name="EmulatorRenderDocToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <TabItem x:Name="EmulatorOutputTabItem" Header="Output" FontSize="15">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EmulatorOutputSectionTitle" Classes="sectionTitle" Text="OUTPUT" />
+
+                      <local:SettingRow x:Name="EmulatorShaderLogDirectionRow" Label="Shader log destination"
+                                        Description="Where shader diagnostics are sent when shader logging is enabled.">
+                        <ComboBox x:Name="EmulatorShaderLogDirectionBox" Width="180" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="EmulatorShaderLogSilentItem" Content="Silent" Tag="Silent" />
+                          <ComboBoxItem x:Name="EmulatorShaderLogConsoleItem" Content="Console" Tag="Console" />
+                          <ComboBoxItem x:Name="EmulatorShaderLogFileItem" Content="File" Tag="File" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorShaderLogFolderRow" Label="Shader log folder"
+                                        Description="Folder used for shader log files.">
+                        <TextBox x:Name="EmulatorShaderLogFolderBox" Width="280" Text="_Shaders" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorPrintfDirectionRow" Label="Guest printf destination"
+                                        Description="Where guest shader and program printf output is sent.">
+                        <ComboBox x:Name="EmulatorPrintfDirectionBox" Width="180" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="EmulatorPrintfSilentItem" Content="Silent" Tag="Silent" />
+                          <ComboBoxItem x:Name="EmulatorPrintfConsoleItem" Content="Console" Tag="Console" />
+                          <ComboBoxItem x:Name="EmulatorPrintfFileItem" Content="File" Tag="File" />
+                        </ComboBox>
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorPrintfOutputFileRow" Label="Guest printf file"
+                                        Description="File used when guest printf output is directed to a file.">
+                        <TextBox x:Name="EmulatorPrintfOutputFileBox" Width="280" Text="_prosperismo.txt" VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EmulatorProfilerDirectionRow" Label="Network profiler"
+                                        Description="Expose native emulator profiling data to a network profiler.">
+                        <ComboBox x:Name="EmulatorProfilerDirectionBox" Width="180" SelectedIndex="0"
+                                  VerticalAlignment="Center" CornerRadius="8">
+                          <ComboBoxItem x:Name="EmulatorProfilerNoneItem" Content="Disabled" Tag="None" />
+                          <ComboBoxItem x:Name="EmulatorProfilerNetworkItem" Content="Network" Tag="Network" />
+                        </ComboBox>
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <!-- Legacy environment switches are preserved in persisted JSON
+                 for migration only; none is a native backend setting. -->
+            <TabItem x:Name="EnvTabItem" Header="Environment" FontSize="15" IsVisible="False">
+              <ScrollViewer>
+                <StackPanel Margin="0,14,0,16" Spacing="16" MaxWidth="1280" HorizontalAlignment="Left">
+
+                  <Border Classes="card">
+                    <StackPanel Spacing="14">
+                      <TextBlock x:Name="EnvSectionTitle" Classes="sectionTitle" Text="ENVIRONMENT VARIABLES" />
+                      <TextBlock x:Name="EnvDesc"
+                                 Text="Switches passed to the emulator as environment variables at launch."
+                                 FontSize="11" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" />
+
+                      <local:SettingRow x:Name="EnvBthidRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_BTHID_UNAVAILABLE"
+                                        Description="Report Bluetooth HID as unavailable for titles whose wheel/FFB middleware polls forever.&#10;Leave off normally. Some titles freeze when init fails.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvBthidToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvLoopGuardRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_DISABLE_IMPORT_LOOP_GUARD"
+                                        Description="Do not force quit titles that repeat the same call for too long.&#10;Try this when a game exits on its own while loading.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvLoopGuardToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvWritableApp0Row" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_WRITABLE_APP0"
+                                        Description="Allow titles to create and write files inside their install folder.&#10;Needed by unpackaged dumps that write their save or config data under /app0.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvWritableApp0Toggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvVkValidationRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_VK_VALIDATION"
+                                        Description="Enable Vulkan validation layers for GPU debugging.&#10;Slow. Requires the Vulkan SDK to be installed.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvVkValidationToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvDumpSpirvRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_DUMP_SPIRV"
+                                        Description="Dump AGC shaders and their SPIR-V translations to the shader-dumps folder.&#10;Use when reporting shader or rendering bugs.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvDumpSpirvToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvLogDirectMemoryRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_LOG_DIRECT_MEMORY"
+                                        Description="Log direct memory allocations and failures to the console.&#10;Use when a game aborts or exits during boot.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvLogDirectMemoryToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvLogIoRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_LOG_IO"
+                                        Description="Log file open, read, and path-resolve activity to the console.&#10;Use when a game cannot find its data files during boot.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvLogIoToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+
+                      <local:SettingRow x:Name="EnvLogNpRow" LabelFontFamily="Consolas,monospace" Label="PROSPERISMO_LOG_NP"
+                                        Description="Log NP (PlayStation Network) library calls to the console.">
+                        <controls:Ps5ToggleSwitch x:Name="EnvLogNpToggle" OnContent="On" OffContent="Off"
+                                      VerticalAlignment="Center" />
+                      </local:SettingRow>
+                    </StackPanel>
+                  </Border>
+
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+          </TabControl>
+        </Grid>
+      </Panel>
+
+      <!-- Console (collapsible) -->
+      <Border Grid.Row="2" x:Name="ConsolePanel" Classes="card" Padding="0" Height="240"
+              Margin="0,12,0,0" IsVisible="False">
+        <Grid RowDefinitions="Auto,*">
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto" Margin="16,12,16,8">
+            <TextBlock x:Name="ConsoleSectionTitle" Classes="sectionTitle" Text="CONSOLE" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" FontSize="12" Margin="0,0,12,0" x:Name="ConsoleSearchBox"
+                    Watermark="Search..." Width="320" />
+            <CheckBox Grid.Column="2" x:Name="AutoScrollCheck" Content="Auto-scroll" IsChecked="True"
+                    FontSize="12" Margin="0,0,12,0" />
+            <Button Grid.Column="3" x:Name="DetachConsoleButton" Classes="ghost" Content="Split" FontSize="12"
+                    Padding="10,4" Margin="0,0,8,0" />
+            <Button Grid.Column="4" x:Name="CopyLogButton" Classes="ghost" Content="Copy" FontSize="12"
+                    Padding="10,4" Margin="0,0,8,0" />
+            <Button Grid.Column="5" x:Name="ClearLogButton" Classes="ghost" Content="Clear" FontSize="12"
+                    Padding="10,4" />
+          </Grid>
+          <ListBox Grid.Row="1" x:Name="ConsoleList" Classes="console" BorderThickness="0,1,0,0"
+                   BorderBrush="{StaticResource CardBorderBrush}" CornerRadius="0,0,12,12">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Text}" Foreground="{Binding Brush}" TextWrapping="NoWrap" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <!-- Launch bar; capped so it does not sprawl on a maximized window. -->
+      <Border Grid.Row="3" x:Name="LaunchBar" Classes="card launcherLaunchBar" Margin="0,12,0,0" Padding="14" MaxWidth="1280">
+        <StackPanel Spacing="14">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+
+            <!-- Selected game cover thumbnail -->
+            <Border Grid.Column="0" Classes="coverClip" Width="56" Height="56" CornerRadius="8"
+                    VerticalAlignment="Center">
+              <Panel x:Name="SelectedCoverPanel">
+                <Border Background="{Binding PlaceholderBrush, FallbackValue={x:Null}}"
+                        IsVisible="{Binding !HasCover, FallbackValue=False}">
+                  <TextBlock Text="{Binding Initials}" FontSize="20" FontWeight="Bold"
+                             Foreground="#E8ECF4" Opacity="0.85"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <Image Source="{Binding Cover}" Stretch="UniformToFill"
+                       IsVisible="{Binding HasCover, FallbackValue=False}" />
+              </Panel>
+            </Border>
+
+            <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center" Margin="14,0,14,0">
+              <Grid ColumnDefinitions="Auto,Auto,*">
+                <TextBlock Grid.Column="0" x:Name="SelectedGameTitle" Text="No game selected" FontSize="16"
+                           FontWeight="Bold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                           MaxWidth="340" Margin="0,0,10,0" />
+
+                <!-- Title id / version / size badges, right next to the
+                     title. The title's own MaxWidth (not a "*" column) is
+                     what keeps them from drifting to the far right. -->
+                <StackPanel Grid.Column="1" x:Name="SelectedBadgesRow" Orientation="Horizontal" Spacing="6"
+                            IsVisible="False" VerticalAlignment="Center">
+                  <Border Classes="pill" IsVisible="{Binding HasTitleId, FallbackValue=False}">
+                    <TextBlock Text="{Binding TitleId}" FontSize="10" FontWeight="SemiBold"
+                               Foreground="{StaticResource MutedBrush}" />
+                  </Border>
+                  <Border Classes="pill" IsVisible="{Binding HasVersion, FallbackValue=False}">
+                    <TextBlock Text="{Binding VersionText}" FontSize="10" FontWeight="SemiBold"
+                               Foreground="{StaticResource MutedBrush}" />
+                  </Border>
+                  <Border Classes="pill">
+                    <TextBlock Text="{Binding SizeText, FallbackValue=''}" FontSize="10" FontWeight="SemiBold"
+                               Foreground="{StaticResource MutedBrush}" />
+                  </Border>
+                </StackPanel>
+              </Grid>
+
+              <TextBlock x:Name="SelectedGamePath" Text="Pick a game from the library, or open an eboot.bin directly."
+                         FontSize="11" Foreground="{StaticResource MutedBrush}" TextTrimming="CharacterEllipsis" />
+              <StackPanel Orientation="Horizontal" Spacing="7">
+                <Ellipse x:Name="StatusDot" Width="8" Height="8" Fill="{StaticResource FaintBrush}"
+                         VerticalAlignment="Center" />
+                <TextBlock x:Name="StatusText" Text="Idle" FontSize="11" Foreground="{StaticResource MutedBrush}"
+                           VerticalAlignment="Center" />
+              </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <ToggleButton x:Name="ConsoleToggle" Classes="ghost desktopAction" Content="≡ Console" />
+              <Button x:Name="LaunchButton" Classes="accent desktopPrimaryAction" Content="▶  Launch" IsEnabled="False" />
+              <Button x:Name="StopButton" Classes="danger" Content="■  Stop" IsEnabled="False" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <!-- Avalonia's regular overlay layer cannot appear over a native child
+         HWND/X11/Metal surface. Keep the running-session controls in a native
+         popup so the game reaches the bottom status bar without losing Stop. -->
+    <primitives:Popup x:Name="SessionBarPopup"
+                      IsOpen="False"
+                      PlacementTarget="{Binding #GameView}"
+                      Placement="Bottom"
+                      VerticalOffset="-66"
+                      Topmost="True"
+                      ShouldUseOverlayLayer="False"
+                      TakesFocusFromNativeControl="False"
+                      IsLightDismissEnabled="False">
+      <Border Classes="card" Width="598" Height="58" CornerRadius="16" Padding="14,8">
+        <Grid ColumnDefinitions="*,Auto">
+          <StackPanel Spacing="3" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock x:Name="SessionGameTitle" Text="GAME RUNNING" FontSize="13" FontWeight="SemiBold"
+                         MaxWidth="240" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+              <Border Classes="badge running" VerticalAlignment="Center">
+                <TextBlock Text="RUNNING" FontSize="9" FontWeight="Bold" LetterSpacing="1"
+                           Foreground="{StaticResource SuccessBrush}" />
+              </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="7">
+              <Border x:Name="SessionF11Badge" Classes="badge key" VerticalAlignment="Center">
+                <TextBlock Text="F11" FontSize="9" FontWeight="Bold"
+                           Foreground="{StaticResource InfoBrush}" />
+              </Border>
+              <TextBlock x:Name="SessionHintText" Text="Fullscreen" FontSize="11"
+                         Foreground="{StaticResource MutedBrush}" VerticalAlignment="Center" />
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <Button x:Name="SessionConsoleButton" Classes="ghost" Content="≡ Console" />
+            <Button x:Name="SessionStopButton" Classes="danger" Content="■  Stop" IsEnabled="False" />
+          </StackPanel>
+        </Grid>
+      </Border>
+    </primitives:Popup>
+
+    <!-- This is a native popup rather than an Avalonia overlay because the
+         emulated Vulkan surface is a native child window. -->
+    <!-- Anchored to MainContent, not GameView: the surface host is parked in
+         a 1x1 corner while loading/closing, which would pull a GameView-
+         anchored popup into the corner with it. -->
+    <primitives:Popup x:Name="SessionLoadingPopup"
+                      IsOpen="False"
+                      PlacementTarget="{Binding #MainContent}"
+                      Placement="Center"
+                      Topmost="True"
+                      ShouldUseOverlayLayer="False"
+                      TakesFocusFromNativeControl="False"
+                      local:ShellMotion.PopupMotion="True"
+                      IsLightDismissEnabled="False">
+      <!-- The margin is a transparent gutter: room for the card's shadow and
+           for the 10px rise the modal show animates through. -->
+      <Border Classes="ps5Card" Width="380" Padding="22,18" Margin="14,10,14,20">
+        <StackPanel Spacing="12">
+          <TextBlock x:Name="SessionLoadingTitle" Text="Loading game" FontSize="16" FontWeight="SemiBold" />
+          <TextBlock x:Name="SessionLoadingDetail" Text="Preparing the emulation session..." FontSize="12"
+                     Foreground="{StaticResource MutedBrush}" TextTrimming="CharacterEllipsis" />
+          <controls:Ps5BusyIndicator Width="34" Height="34" HorizontalAlignment="Center" />
+          <controls:Ps5ProgressBar IsIndeterminate="True" Height="5" />
+        </StackPanel>
+      </Border>
+    </primitives:Popup>
+
+    <!-- Status bar -->
+    <Grid x:Name="StatusBar" Classes="launcherStatusBar" Grid.Row="2" Height="32" Background="{StaticResource ChromeBrush}"
+          ColumnDefinitions="*,Auto">
+      <TextBlock x:Name="EmulatorPathText" Grid.Column="0" Text="Emulator: locating…" FontSize="11"
+                 Foreground="{StaticResource FaintBrush}" VerticalAlignment="Center" Margin="16,0"
+                 TextTrimming="CharacterEllipsis" />
+      <TextBlock x:Name="StatusBarRight" Grid.Column="1" Text="" FontSize="11"
+                 Foreground="{StaticResource FaintBrush}" VerticalAlignment="Center" Margin="16,0" />
+    </Grid>
+
+    <!-- Notifications and dialogs use values authored in the same 1920x1080
+         space as HOME and Settings. Keep them on one uniformly scaled overlay
+         surface: placing these hosts directly in the desktop client made a
+         652-unit toast and a 1312-unit dialog body physically different sizes
+         at every window/DPI combination except 1920 logical pixels. -->
+    <Viewbox Grid.RowSpan="3" ZIndex="19000"
+             Stretch="Uniform" StretchDirection="Both"
+             HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Panel x:Name="ShellOverlaySurface" Width="1920" Height="1080" ClipToBounds="False">
+
+        <controls:ShellControlCenter x:Name="ControlCenterHost"
+                                     Width="1920" Height="1080"
+                                     ZIndex="18000" />
+        <!-- NPXS40002 function-control profile. HOME m143 anchors every
+             function panel at 1188,126; the direct console tour confirms the
+             same 652-wide five-row plate and full-screen dim layer. -->
+        <Canvas x:Name="ProfilePopoverSurface"
+                Width="1920" Height="1080" ZIndex="18500"
+                IsVisible="False" IsHitTestVisible="False" Opacity="0">
+          <Canvas.RenderTransform>
+            <TranslateTransform Y="20" />
+          </Canvas.RenderTransform>
+          <Border Width="1920" Height="1080" Background="#A6000000"
+                  PointerPressed="OnProfilePopoverScrimPressed" />
+          <controls:ShellFunctionPanel x:Name="ProfileFunctionPanel"
+                                       Canvas.Left="1188" Canvas.Top="126" />
+        </Canvas>
+        <!-- NPXS40011's exact native popup anchor is not present in the
+             recovered bundle, so the inset remains host policy. -->
+        <controls:ShellNotificationHost x:Name="NotificationHost"
+                                        Width="1920" Height="1080" />
+        <Panel x:Name="SystemOverlayHost" Width="1920" Height="1080"
+               ZIndex="19500" IsHitTestVisible="False" />
+      </Panel>
+    </Viewbox>
+  </Grid>
+</Window>

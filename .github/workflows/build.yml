@@ -1,0 +1,301 @@
+name: Build and Release Prosperismo
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    tags: [ '*' ]
+  pull_request:
+
+jobs:
+  windows:
+    name: Build Prosperismo (Windows)
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Visual Studio environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Locate vcpkg
+        id: vcpkg
+        shell: pwsh
+        run: |
+          $vcpkgRoot = Split-Path (Get-Command vcpkg).Source
+          $portHash = (Get-FileHash "$vcpkgRoot\ports\glslang\vcpkg.json" -Algorithm SHA256).Hash
+          "root=$vcpkgRoot" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "port_hash=$($portHash.ToLowerInvariant())" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Cache glslang
+        id: glslang_cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.vcpkg.outputs.root }}\installed\x64-windows
+          key: glslang-${{ runner.os }}-${{ runner.arch }}-${{ steps.vcpkg.outputs.port_hash }}-tools-opt
+
+      - name: Install glslang
+        shell: pwsh
+        run: |
+          $vcpkgRoot = "${{ steps.vcpkg.outputs.root }}"
+          if ("${{ steps.glslang_cache.outputs.cache-hit }}" -ne "true") {
+            vcpkg install glslang[tools,opt]:x64-windows
+          }
+          "$vcpkgRoot\installed\x64-windows\tools\glslang" |
+            Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify toolchain
+        shell: cmd
+        run: |
+          git --version
+          cmake --version
+          ninja --version
+          clang-cl --version
+          glslangValidator --version
+
+      - name: Build, test, and stage active release payload
+        shell: pwsh
+        run: |
+          python scripts/build_release.py --platform windows
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Prosperismo-Windows-x64
+          path: _Build/windows/install/**
+          if-no-files-found: error
+
+  macos:
+    name: Build Prosperismo (macOS)
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Select Xcode 26
+        shell: bash
+        run: |
+          xcode_path="$(ls -d /Applications/Xcode_26*.app | tail -n 1)"
+          test -n "$xcode_path"
+          sudo xcode-select --switch "$xcode_path/Contents/Developer"
+          xcodebuild -version
+
+      - name: Install build dependencies
+        shell: bash
+        run: brew install glslang ninja
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Verify toolchain
+        shell: bash
+        run: |
+          git --version
+          cmake --version
+          ninja --version
+          clang++ --version
+          glslangValidator --version
+          echo "Host architecture: $(uname -m)"
+
+      - name: Build, test, and stage active release payload
+        shell: bash
+        run: |
+          python3 scripts/build_release.py --platform macos
+
+      - name: Verify artifacts
+        shell: bash
+        run: |
+          file _Build/macos/install/prosperismo_emulator
+          file _Build/macos/install/Prosperismo
+          file _Build/macos/install/libMoltenVK.dylib
+          lipo _Build/macos/install/prosperismo_emulator -verify_arch x86_64
+          lipo _Build/macos/install/Prosperismo -verify_arch x86_64
+          lipo _Build/macos/install/libMoltenVK.dylib -verify_arch x86_64
+          codesign --verify --strict _Build/macos/install/prosperismo_emulator
+          codesign --force --sign - --timestamp=none _Build/macos/install/Prosperismo
+          codesign --verify --strict _Build/macos/install/Prosperismo
+          codesign --verify --strict _Build/macos/install/libMoltenVK.dylib
+          python3 scripts/build_release.py --platform macos --verify-package-only
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Prosperismo-macOS-x86_64
+          path: _Build/macos/install/**
+          if-no-files-found: error
+
+  linux:
+    name: Build Prosperismo (Linux)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          git config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
+          git submodule update --init --recursive
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes \
+            clang \
+            glslang-tools \
+            libasound2-dev \
+            libdbus-1-dev \
+            libgl1-mesa-dev \
+            libpulse-dev \
+            libudev-dev \
+            libwayland-dev \
+            libx11-dev \
+            libxcursor-dev \
+            libxext-dev \
+            libxfixes-dev \
+            libxi-dev \
+            libxkbcommon-dev \
+            libxrandr-dev \
+            libxss-dev \
+            lld \
+            ninja-build \
+            wayland-protocols
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Verify toolchain
+        shell: bash
+        run: |
+          git --version
+          cmake --version
+          ninja --version
+          clang++ --version
+          ld.lld --version
+          glslangValidator --version
+
+      - name: Build, test, and stage active release payload
+        shell: bash
+        run: |
+          python3 scripts/build_release.py --platform linux
+
+      - name: Verify SDL2 backends
+        shell: bash
+        run: |
+          status=0
+          for feature in SDL_ALSA SDL_PULSEAUDIO SDL_WAYLAND SDL_X11 SDL_LIBUDEV SDL_DBUS; do
+            if grep -qE "^-- +${feature} +\\(Wanted: ON\\): ON" _Build/linux/configure.log; then
+              echo "ok   ${feature}"
+            else
+              echo "FAIL ${feature} is not enabled"
+              status=1
+            fi
+          done
+          exit "$status"
+
+      - name: Verify artifacts
+        shell: bash
+        run: |
+          file _Build/linux/install/prosperismo_emulator
+          file _Build/linux/install/Prosperismo
+          file _Build/linux/install/prosperismo_emulator | grep -q "ELF 64-bit LSB .*x86-64"
+          ldd _Build/linux/install/prosperismo_emulator > /dev/null
+          ldd _Build/linux/install/Prosperismo > /dev/null
+          _Build/linux/install/prosperismo_emulator --help > /dev/null
+          python3 scripts/build_release.py --platform linux --verify-package-only
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Prosperismo-Linux-x86_64
+          path: _Build/linux/install/**
+          if-no-files-found: error
+
+  release:
+    name: Release Prosperismo
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: [windows, macos, linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download builds
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Set release name
+        shell: bash
+        run: |
+          echo "RELEASE_NAME=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+
+      - name: Package builds
+        shell: bash
+        run: |
+          windows_dir="artifacts/Prosperismo-Windows-x64"
+          macos_dir="artifacts/Prosperismo-macOS-x86_64"
+          linux_dir="artifacts/Prosperismo-Linux-x86_64"
+          test -d "$windows_dir"
+          test -d "$macos_dir"
+          test -d "$linux_dir"
+          chmod a+x \
+            "$macos_dir/prosperismo_emulator" \
+            "$macos_dir/libMoltenVK.dylib" \
+            "$linux_dir/prosperismo_emulator"
+          (
+            cd "$windows_dir"
+            zip -r "$GITHUB_WORKSPACE/$RELEASE_NAME-Windows-x64.zip" .
+          )
+          (
+            cd "$macos_dir"
+            zip -r "$GITHUB_WORKSPACE/$RELEASE_NAME-macOS-x86_64.zip" .
+          )
+          tar -C "$linux_dir" -czf \
+            "$GITHUB_WORKSPACE/$RELEASE_NAME-Linux-x86_64.tar.gz" .
+
+      - name: Create release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          assets=(
+            "$RELEASE_NAME-Windows-x64.zip"
+            "$RELEASE_NAME-macOS-x86_64.zip"
+            "$RELEASE_NAME-Linux-x86_64.tar.gz"
+          )
+          if gh release view "$RELEASE_NAME" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release upload "$RELEASE_NAME" "${assets[@]}" \
+              --clobber \
+              --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$RELEASE_NAME" "${assets[@]}" \
+              --generate-notes \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "$RELEASE_NAME"
+          fi

@@ -1,0 +1,9 @@
+{
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "types": ["jest"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "//": "web/ is the react-native-web browser harness (see docs/sony-shell/web-preview.md). It needs the DOM lib and react-dom types that the app itself must not depend on, so it is typechecked by web/tsconfig.json instead.",
+  "exclude": ["**/node_modules", "**/Pods", "web"]
+}

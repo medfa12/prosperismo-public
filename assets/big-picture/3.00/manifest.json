@@ -1,0 +1,243 @@
+{
+  "firmware_version": "3.00",
+  "update_identity": {
+    "prefix_version": "21.01",
+    "pup1_file": "PS5UPDATE1.PUP.dec",
+    "pup1_size": 902257172,
+    "pup1_sha256": "3802fd0b5ca1a50ccec4cbf87f7086685500207e0f33ac5cd6479e7cc9200947",
+    "pup2_file": "PS5UPDATE2.PUP.dec",
+    "pup2_size": 146625540,
+    "pup2_sha256": "59e6cf0eca74604cefd5608cf0bec0b1d528268e9732471cab5e013c4dee43cb"
+  },
+  "extraction": {
+    "filesystem": "tools/shell-recovery/pup_exfat_extract.py; PUP1 segment 26 (/system_ex), 1901 blocks at 512 KiB",
+    "rco": "tools/shell-recovery/RcoExtract; exact named entry payload copied without transcoding",
+    "audio_derivative": "ffmpeg ATRAC9 decode, same 5.1-to-stereo coefficients as At9Music, PCM16/WAVE at 48000 Hz; authored smpl loops retained in audio/loops.json"
+  },
+  "assets": [
+    {
+      "path": "assets/big-picture/3.00/transitions/ripple-p.spv",
+      "source_path": "/system_ex/app/NPXS40087/eboot.bin@0xC751A0",
+      "source_image_sha256": "a34e975b6237794b1e83deca61b813156f6cf39bb60ce4916b652d15000b18b5",
+      "sha256": "0bb7fbde6e1adc4b780a43564b2c2ad4a7ce1492feda982813da373b86963fa1",
+      "size": 208312,
+      "format": "SPIR-V 1.6",
+      "derivative": "host-portable SPIR-V generated once by the Prosperismo Gen5 translator from the recovered program slice",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BackgroundPlate.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/background/plane2-records.bin",
+      "source_path": "/system_ex/app/NPXS40087/eboot.bin@0x9A1BB0",
+      "source_image_sha256": "a34e975b6237794b1e83deca61b813156f6cf39bb60ce4916b652d15000b18b5",
+      "sha256": "bb334c74d36bae57302509fdf7a3997250278d852518efef26e8e62b7cd7552a",
+      "size": 4144,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Shell/Ps5NativeWaveRecordSource.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/textures/tex_default_game.png",
+      "source_path": "/system_ex/app/NPXS40087/psm/Application/resource/Sce.Vsh.ShellUI.Base.rco:tex_default_game/src_4k",
+      "sha256": "641fe56e045c9b05f9b4a1ba012404acaec20df712c34842afc17c8028f45980",
+      "size": 7168,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/MainWindow.axaml.cs", "frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/ShellIcons.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/bgm_home.wav",
+      "source_path": "/system_ex/vsh_asset/bgm_home.at9",
+      "source_sha256": "7af0139ce895cd8df39df8c6ac6d358cda5361c3a463cf9e75cb8fc0d5f28881",
+      "sha256": "8f6518b4efe94c799b2ae2a72f79f4ae29d0109c68141584b331d19d7270510e",
+      "size": 45666382,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "loop": {
+        "metadata": "assets/big-picture/3.00/audio/loops.json",
+        "start_frame": 278612,
+        "end_frame_exclusive": 9417257
+      },
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/ShellAudio.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/bgm_onboarding.wav",
+      "source_path": "/system_ex/vsh_asset/bgm_onboarding.at9",
+      "source_sha256": "0f06231466865ff97e33090b268674eab857f3cf70219d2dc0d8ef54d0a22a63",
+      "sha256": "c94d6c7e25477d9f48b2b627eaa6fa964c50e431768dd276353e5ec43d55393a",
+      "size": 30724174,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "loop": {
+        "metadata": "assets/big-picture/3.00/audio/loops.json",
+        "start_frame": 1298113,
+        "end_frame_exclusive": 6579824
+      },
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/ShellAudio.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/sfx_coldboot.wav",
+      "source_path": "/system_ex/vsh_asset/sfx_coldboot.at9",
+      "source_sha256": "38bbef69511730a2466ab2a0187a654565e910c68d355a6e825796b7556d40d1",
+      "sha256": "80bab4404aa4285bac1ff346914196b57a3506340b42ae29c3fa4c4fecd77dbb",
+      "size": 1699918,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/ShellAudio.cs", "frontend/ProsperismoShell/Prosperismo.Shell/BootAnimation/BootIntroPolicy.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/sfx_initialboot.wav",
+      "source_path": "/system_ex/vsh_asset/sfx_initialboot.at9",
+      "source_sha256": "ce690d5b7c811c01e90abf59c6de2aaf05c8de23c858742ba063e7b70bd288c9",
+      "sha256": "1281680ce05e519ca8dab5b687b7fae6fb2de99634a704b5d1f1a0e5e53a84eb",
+      "size": 4014158,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/BootAnimation/BootIntroPolicy.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/sfx_transition.wav",
+      "source_path": "/system_ex/vsh_asset/sfx_transition.at9",
+      "source_sha256": "c7741e48a71661d804ac7f627e068a72a39014d3b76bec9c07f0f8e92c787d3d",
+      "sha256": "bd88814836ee743dab89db1ec3e4a9b1dbe76d79d70ad3b183a2a98c1f9ffb7f",
+      "size": 1568846,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "consumers": [],
+      "planned_consumers": ["Group 8 shell-state transition audio integration"]
+    },
+    {
+      "path": "assets/big-picture/3.00/audio/sfx_warmboot.wav",
+      "source_path": "/system_ex/vsh_asset/sfx_warmboot.at9",
+      "source_sha256": "5ab3f76191643499d65d10fb21f5df2b6221581dae0d4622a0c1f611adf40c08",
+      "sha256": "e92573626387e3759e2dfcbe8408598dce6a69a6a0fb862e9daab9d5f635b1db",
+      "size": 1036366,
+      "format": "pcm_s16le stereo 48000 Hz",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/ShellAudio.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/textures/Sce.Vsh.ShellUI.BGLayer.Particle0.png",
+      "source_path": "/system_ex/vsh_asset/Sce.Vsh.ShellUI.BGLayer.Particle0.gnf",
+      "source_sha256": "e989bcd6325a7b889f869863e4c32019c89e7aaa4cace49795f17b6d4db23991",
+      "intermediate_gnf_sha256": "ff1b3390844c0d2ab94fd8546ed59efbfae08c2aad239ee0b7a3e5629e4f6a5f",
+      "sha256": "ff2b9a36d64d4b920e08a6375b766a5c993537984e7eea165c7a8f5e9e0fce05",
+      "rgba_sha256": "a3384d30a7ea34745c8edb513a6ecae903e4710cac64837ca050ee73ba7d9e84",
+      "size": 116791,
+      "dimensions": "480x270",
+      "format": "lossless RGBA8 PNG",
+      "derivative": "Prism palette applied to decoded source pixels; the recolored BC7 intermediate was decoded once to host-portable PNG with identical RGBA output",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Shell/Ps5NativeBackgroundAssetPack.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/textures/Sce.Vsh.ShellUI.BGLayer.Particle1.png",
+      "source_path": "/system_ex/vsh_asset/Sce.Vsh.ShellUI.BGLayer.Particle1.gnf",
+      "source_sha256": "9cb10598c0b00a99743ab504eb5a9026fdb18f326b182de31052c2acec1a782b",
+      "intermediate_gnf_sha256": "c0383943ac2fd4d40ae9526d20d010e2c406c3e853f9921f0e22a71f93965a88",
+      "sha256": "8e92a039b649b91ed2641c462be34273faa90c1870680a8146482d3162e7577b",
+      "rgba_sha256": "cc5f7f2389219e475cfbb2ad0b3e87b8dbd615f3987bf5b5d41de662bc5a5937",
+      "size": 51900,
+      "dimensions": "480x270",
+      "format": "lossless RGBA8 PNG",
+      "derivative": "Prism palette applied to decoded source pixels; the recolored BC7 intermediate was decoded once to host-portable PNG with identical RGBA output",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Shell/Ps5NativeBackgroundAssetPack.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/descriptors/bglayer-particle.bin",
+      "source_path": "/system_ex/vsh_asset/Sce.Vsh.ShellUI.BGLayer.Particle0.gnf@0x10",
+      "sha256": "6c54a8ce40ac78fb29d34960cc0c877ef66a58bcea2df0e0882c6a7c59a9ffd1",
+      "size": 32,
+      "format": "Gen5 T# image descriptor template; image address is replaced at runtime",
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Shell/Ps5NativeBackgroundAssetPack.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/rco/Sce.Vsh.ShellUI.BGLayer.rco",
+      "source_path": "/system_ex/app/NPXS40087/psm/Application/resource/Sce.Vsh.ShellUI.BGLayer.rco",
+      "sha256": "c9fd8c55ebc340360aa3148b2b80221d8260316a27ba1a181c5287ab7c9940ee",
+      "size": 6096,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5ShellResourcePack.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/rco/Sce.Vsh.ShellUI.Base.rco",
+      "source_path": "/system_ex/app/NPXS40087/psm/Application/resource/Sce.Vsh.ShellUI.Base.rco",
+      "sha256": "00b2d3a42fda1ec899ec82051b8d729711e9eb29e23932f8321abe9cbc43743b",
+      "size": 6602032,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5ShellResourcePack.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_home.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_home/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "3868d88b6d607645996b23cfdf95cf612e5b93784dbf76891b53eaf03a83634d",
+      "size": 798,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_switcher.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_switcher/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "92f3c976cb6d1a4374677e314f8c99c1935209d01bf6a35a41a09654c9545f11",
+      "size": 1080,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_notification.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_notification/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "5a2f2b61b09c6783d69dc508288f326957301c1c0212636688e7d39363d2761c",
+      "size": 1109,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_game_base.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_game_base/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "5df4f715decc8678aa351fb3ebf8605c776c75aa30178bb6576a8bd1425bd6c6",
+      "size": 2347,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_music.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_music/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "6120664022d949ecefb92667f0e606930d2c55bdb97716bd1a371e2c5a2e75c7",
+      "size": 938,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_sound_speaking.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_sound_speaking/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "6ca0912a5fdf58d53424e657faddc974feb4c3ec3da2c6c3cc7e271b96df4283",
+      "size": 612,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_mic.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_mic/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "4af9910834e5bb7a63fc339d7e4e55347280b06614f3d22f44dc2bd17abc4f0b",
+      "size": 1177,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_game.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_game/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "63273b8aa973df36846d15abc63281cc43d2880fe1f9c67146b5a13d39e867a0",
+      "size": 1087,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_ps_user.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_ps_user/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "c7f6d23501600c9760e845f56b61194596aafca8a737fcd83fd451d00052dd80",
+      "size": 806,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    },
+    {
+      "path": "assets/big-picture/3.00/control-center-icons/iconid_power.svg",
+      "source_path": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco:iconid_power/src",
+      "source_container_sha256": "d1fe0ca8bd077cf979928415e2b0505a82e4944a9637f323044af543a1cde055",
+      "sha256": "e74f2f48020aefca6d4a02e5709ec78e15a30836cd763940cfd07d6aeb8f4be9",
+      "size": 1008,
+      "consumers": ["frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs", "frontend/ProsperismoShell/Prosperismo.Shell/Controls/ShellControlCenter.cs"]
+    }
+  ],
+  "evidence": [
+    "docs/sony-shell/vsh-asset-recovered-from-pup.md",
+    "docs/sony-shell/ps5-shell-audio.md",
+    "docs/sony-shell/ps5-icons.md",
+    "docs/sony-shell/required-assets.md"
+  ]
+}

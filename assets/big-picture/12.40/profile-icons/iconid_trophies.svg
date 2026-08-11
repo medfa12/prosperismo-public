@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>game/iconid_trophiesx</title>
+    <desc>Created with Sketch.</desc>
+    <g id="game/iconid_trophies" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-5" transform="translate(11.000000, 11.000000)" fill="#FFFFFF">
+            <path d="M11,1.5 C11,0.95 11.45,0.5 12,0.5 L30,0.5 C30.55,0.5 31,0.95 31,1.5 L31,8.5 C31,17.061 23.21,22.201 23,26 C22.76,30.334 22.994,34.128 27.727,39.21 C27.898,39.395 28,39.64 28,39.891 L28,40.5 C28,41.053 27.552,41.5 27,41.5 L15,41.5 C14.448,41.5 14,41.052 14,40.5 L14,39.891 C14,39.64 14.102,39.395 14.273,39.21 C19.006,34.128 19.24,30.334 19,26 C18.79,22.201 11,17.061 11,8.5 L11,1.5 Z" id="Fill-1"></path>
+            <path d="M4.6299,5.5 L37.3699,5.5 C36.3679,13.96 29.1539,21 20.9999,21 C12.8459,21 5.6319,13.96 4.6299,5.5 M0.4999,3.5 C0.4999,15.154 9.8879,25 20.9999,25 C32.1119,25 41.4999,15.154 41.4999,3.5 C41.4999,2.396 40.6049,1.5 39.4999,1.5 L2.4999,1.5 C1.3959,1.5 0.4999,2.396 0.4999,3.5" id="Fill-3"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This project was created with react-native-windows 0.84.0 -->
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)\ExperimentalFeatures.props" Condition="Exists('$(SolutionDir)\ExperimentalFeatures.props')" />
+  <PropertyGroup Label="Globals">
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <!-- Prevent MSB4006 circular dependency in CppWinRT during parallel builds (https://github.com/microsoft/cppwinrt/issues/950) -->
+    <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
+    <MinimalCoreWin>true</MinimalCoreWin>
+    <ProjectGuid>{A2D167B4-19EC-4F9A-92FB-3DB40D28EB6F}</ProjectGuid>
+    <ProjectName>Prosperismo</ProjectName>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Prosperismo</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <AppxPackage>false</AppxPackage>
+  </PropertyGroup>
+  <PropertyGroup Label="ReactNativeWindowsProps">
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'node_modules\react-native-windows\package.json'))\node_modules\react-native-windows\</ReactNativeWindowsDir>
+    <!-- The desktop launcher is intentionally runnable directly from its artifact
+         directory. Give the WinAppSDK build targets an explicit unpackaged identity
+         and bootstrap the installed Windows App Runtime before AppWindow::Create. -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSdkBootstrapInitialize>true</WindowsAppSdkBootstrapInitialize>
+    <WindowsAppSdkAutoInitialize>true</WindowsAppSdkAutoInitialize>
+    <!-- Invoke this repository's configured CLI entry point. `npx
+         @react-native-community/cli` does not load the out-of-tree Windows
+         platform command in this dependency layout. -->
+    <ProsperismoLauncherDir>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\..'))</ProsperismoLauncherDir>
+    <BundleCliCommand>node -r &quot;$(ProsperismoLauncherDir)\tools\rnw-powershell-shim.cjs&quot; &quot;$(ProsperismoLauncherDir)\node_modules\@react-native-community\cli\build\bin.js&quot; bundle</BundleCliCommand>
+    <AutolinkCommand>node -r &quot;$(ProsperismoLauncherDir)\tools\rnw-powershell-shim.cjs&quot; &quot;$(ProsperismoLauncherDir)\node_modules\@react-native-community\cli\build\bin.js&quot; autolink-windows</AutolinkCommand>
+    <CodegenCommand>node -r &quot;$(ProsperismoLauncherDir)\tools\rnw-powershell-shim.cjs&quot; &quot;$(ProsperismoLauncherDir)\node_modules\@react-native-community\cli\build\bin.js&quot; codegen-windows</CodegenCommand>
+  </PropertyGroup>
+  <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="ReactNativeWindowsPropertySheets">
+    <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>
+        $(MSBuildThisFileDirectory);
+        $(MSBuildThisFileDirectory)..\..\..\..\3rdparty\LibAtrac9\C\src;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>dwrite.lib;ole32.lib;shell32.lib;shlwapi.lib;user32.lib;winmm.lib;windowsapp.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClInclude Include="Prosperismo.h" />
+    <ClInclude Include="ProsperismoHost.h" />
+    <ClInclude Include="ProsperismoHostSupport.h" />
+    <ClInclude Include="NativeBackgroundFrameProtocol.h" />
+    <ClInclude Include="FirstWaveBackground.h" />
+    <ClInclude Include="FirstWaveBlur.h" />
+    <ClInclude Include="FirstWaveParticle.h" />
+    <ClInclude Include="FirstWaveSurface.h" />
+    <ClInclude Include="NativeWavePlate.h" />
+    <ClInclude Include="ProsperismoFocusRing.h" />
+    <ClInclude Include="ProsperismoLocalImage.h" />
+    <ClInclude Include="ProsperismoLocalImageProvider.h" />
+    <ClInclude Include="ProsperismoNativeBackground.h" />
+    <ClInclude Include="ShellFocusKit.h" />
+    <ClInclude Include="ShellTypography.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="AutolinkedNativeModules.g.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Prosperismo.cpp" />
+    <ClCompile Include="ProsperismoHost.cpp" />
+    <ClCompile Include="ProsperismoHostSupport.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\band_extension.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\bit_allocation.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\bit_reader.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\decoder.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\decinit.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\huffCodes.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\imdct.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\libatrac9.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\quantization.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\scale_factors.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\tables.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\unpack.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\LibAtrac9\C\src\utility.c"><PrecompiledHeader>NotUsing</PrecompiledHeader><CompileAs>CompileAsC</CompileAs></ClCompile>
+    <ClCompile Include="FirstWaveBackground.cpp" />
+    <ClCompile Include="FirstWaveBlur.cpp" />
+    <ClCompile Include="FirstWaveParticle.cpp" />
+    <ClCompile Include="FirstWaveSurface.cpp" />
+    <ClCompile Include="NativeWavePlate.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ProsperismoFocusRing.cpp" />
+    <ClCompile Include="ProsperismoLocalImage.cpp" />
+    <ClCompile Include="ProsperismoLocalImageProvider.cpp" />
+    <ClCompile Include="ProsperismoNativeBackground.cpp" />
+    <ClCompile Include="ShellFocusKit.cpp" />
+    <ClCompile Include="ShellTypography.cpp" />
+    <ClCompile Include="AutolinkedNativeModules.g.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Prosperismo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Prosperismo.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ReactNativeWindowsTargets">
+    <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.targets')" />
+  </ImportGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references targets in your node_modules\react-native-windows folder. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.props')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.props'))" />
+    <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Composition.CppApp.targets'))" />
+  </Target>
+</Project>

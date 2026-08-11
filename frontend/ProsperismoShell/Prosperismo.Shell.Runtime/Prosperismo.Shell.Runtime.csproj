@@ -1,0 +1,26 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Prosperismo.Shell.HLE\Prosperismo.Shell.HLE.csproj" />
+    <ProjectReference Include="..\Prosperismo.Shell.Logging\Prosperismo.Shell.Logging.csproj" />
+    <ProjectReference Include="..\Prosperismo.Shell.ShaderCompiler\Prosperismo.Shell.ShaderCompiler.csproj" />
+    <ProjectReference Include="..\Prosperismo.Shell.ShaderCompiler.Vulkan\Prosperismo.Shell.ShaderCompiler.Vulkan.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Iced" />
+    <PackageReference Include="Silk.NET.Vulkan" />
+    <PackageReference Include="Silk.NET.Vulkan.Extensions.EXT" />
+    <PackageReference Include="Silk.NET.Vulkan.Extensions.KHR" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Prosperismo.Shell.Runtime.Tests" />
+  </ItemGroup>
+</Project>

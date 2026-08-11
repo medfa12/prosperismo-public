@@ -1,0 +1,125 @@
+<!--
+Copyright (C) 2026 SharpEmu Emulator Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Class library: the GUI is hosted by Prosperismo.CLI, which opens it when
+       the executable is started without arguments. -->
+  <PropertyGroup>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Required by the source-generated LibraryImport stubs in the linked
+         controller readers below. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Dependency-free; provides the BuildInfo provenance shown in the
+       title bar. -->
+  <ItemGroup>
+    <!-- The GUI owns the native presentation control while each game runs in
+         an isolated emulator process. -->
+    <ProjectReference Include="..\Prosperismo.Shell.Logging\Prosperismo.Shell.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Prosperismo.Libs.Tests" />
+    <InternalsVisibleTo Include="Prosperismo.Shell.Runtime.Tests" />
+    <!-- tools/shell-capture drives the live background off-screen so it can be
+         graded against reference footage. It reads the same compositor the
+         shell draws, rather than a second copy of it that could drift. -->
+    <InternalsVisibleTo Include="ShellCapture" />
+    <!-- tools/shell-shot renders the real controls off-screen. It has to drive
+         their clocks itself, because a headless run has no wall clock for the
+         controls' own timers to advance against. -->
+    <InternalsVisibleTo Include="ShellShot" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Iced" />
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Tmds.DBus.Protocol" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Shell button pictograms. Optional by design: deleting the directory is
+         supported and ShellIcons falls back to the user's dump, then to its own
+         glyphs. See LICENSES/LicenseRef-PlayStation-UI-Assets.txt. -->
+    <AvaloniaResource Include="..\..\..\assets\icons\shell\*.png" Link="Assets/ShellIcons/%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\..\..\assets\big-picture\3.00\control-center-icons\*.svg" Link="Assets/BigPicture/3.00/ControlCenterIcons/%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\..\..\assets\big-picture\12.40\profile-icons\*.svg" Link="Assets/BigPicture/12.40/ProfileIcons/%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\..\..\assets\big-picture\12.40\utility-icons\*.svg" Link="Assets/BigPicture/12.40/UtilityIcons/%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\..\..\assets\big-picture\12.40\system-icons\*.svg" Link="Assets/BigPicture/12.40/SystemIcons/%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\..\..\assets\branding\prosperismo.ico" Link="Assets/Prosperismo.ico" />
+    <AvaloniaResource Include="..\..\..\assets\images\github.png" Link="Assets/github.png" />
+    <AvaloniaResource Include="..\..\..\assets\images\discord.png" Link="Assets/discord.png" />
+    <AvaloniaResource Include="..\..\..\assets\images\update-icon.png" Link="Assets/update-icon.png" />
+    <AvaloniaResource Include="..\..\..\assets\images\commit-icon.png" Link="Assets/commit-icon.png" />
+    <AvaloniaResource Include="..\..\..\assets\images\pic0.png" Link="Assets/pic0.png" />
+    <!-- UI typeface: Fira Sans (SIL OFL 1.1), the single bundled family used
+         by both Desktop and Big Picture. -->
+    <AvaloniaResource Include="..\..\..\assets\fonts\FiraSans\*.ttf" Link="Assets/Fonts/%(Filename)%(Extension)" />
+
+
+    <AvaloniaResource Include="..\..\..\assets\fonts\BrunoAce\*.ttf" Link="Assets/Fonts/%(Filename)%(Extension)" />
+
+
+    <None Include="..\..\..\assets\big-picture\3.00\audio\*.wav"
+          Link="assets\big-picture\3.00\audio\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.00\audio\*.json"
+          Link="assets\big-picture\3.00\audio\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+
+    <None Include="..\..\..\assets\big-picture\12.40\ui3\*.png"
+          Link="assets\big-picture\12.40\ui3\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.00\textures\*.png"
+          Link="assets\big-picture\3.00\textures\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.00\descriptors\*.bin"
+          Link="assets\big-picture\3.00\descriptors\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.00\background\*.bin"
+          Link="assets\big-picture\3.00\background\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.00\transitions\*.spv"
+          Link="assets\big-picture\3.00\transitions\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\3.20\focus\*.spv"
+          Link="assets\big-picture\3.20\focus\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\12.40\ui-sounds\*.wav"
+          Link="assets\big-picture\12.40\ui-sounds\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\12.40\ui3-raster\*.png"
+          Link="assets\big-picture\12.40\ui3-raster\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\big-picture\12.40\background\**\*"
+          Link="assets\big-picture\12.40\background\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Languages\*.json">
+      <LogicalName>Languages.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Prosperismo.Shell.Runtime\Prosperismo.Shell.Runtime.csproj" />
+  </ItemGroup>
+</Project>

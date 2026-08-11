@@ -1,0 +1,109 @@
+{
+  "firmware_version": "12.40",
+  "source": {
+    "path": "/system_ex/app/NPXS40087/eboot.bin",
+    "size": 21695212,
+    "sha256": "18c9320be767a540578e54cb769f94996c3f37a4f158ef977ebfb798ffd6b04f",
+    "short_container_size": 21695140,
+    "short_container_sha256": "01a1482df57d9d63d7e4c010b64b6d5af7444137663b665b587b24e5f087aff8",
+    "short_container_relation": "byte-identical prefix; the full image adds 72 trailing zero bytes"
+  },
+  "path_base": "assets/big-picture/12.40",
+  "extraction": {
+    "slices": "exact file-offset/length copies from the decrypted executable; no transcoding",
+    "colors": "tools/dump_wave_colour_presets.py --raw; exact replay of the executable's straight-line WaveColourPreset seeder"
+  },
+  "consumer": "frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Shell/Ps5NativeBackgroundAssetPack.cs",
+  "ui3_derivatives": {
+    "source_container": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco",
+    "source_container_size": 54687360,
+    "source_container_sha256": "62053f9ca86d19d470d568614692efe1970a729da72709907de9623c98138766",
+    "selection": "named PNG and SVG entries; src_4k where available for PNG controls, src for busy indicators, focus noise, profile icons, and utility icons",
+    "text_normalization": "packaged SVG files preserve path data and viewBox but normalize source CRLF to repository LF",
+    "consumers": [
+      "frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Ps5Ui3Chrome.cs",
+      "frontend/ProsperismoShell/Prosperismo.Shell/SystemAssets/Ps5Ui3ControlAssets.cs",
+      "frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5FocusNoiseTexture.cs",
+      "frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5BundledIconLibrary.cs"
+    ],
+    "assets": [
+      { "path": "ui3/button-base.png", "entry": "image_button_base", "source_label": "src_4k", "size": 757, "sha256": "8754e85ae55af92087ee501f477cd81b9c85d7a8e63e98bca5fd4a16cabd7a94" },
+      { "path": "ui3/emphasis-button-base.png", "entry": "image_emphasisbutton_base", "source_label": "src_4k", "size": 182, "sha256": "deb332f552928a4cff62c040983a592852513b8468412aeccccfdc84402e20b9" },
+      { "path": "ui3/menu-base.png", "entry": "image_menu_base", "source_label": "src_4k", "size": 147, "sha256": "0103e81e000f11885a67c0bec114d0dae29b2cb7ae04db5c6e72149727ec8a09" },
+      { "path": "ui3/popup-dialog-base.png", "entry": "image_popup_dialog_base", "source_label": "src_4k", "size": 148, "sha256": "d35b7e5e7a2c98eb6966e4be7aa899871cf266d4fb37674cd494108aae8fcecc" },
+      { "path": "ui3/switch-base.png", "entry": "image_switch_base", "source_label": "src_4k", "size": 444, "sha256": "54cc345b1465f75c1c36e7ad07201d922e09e3c9aa09bd9eb0438a6471c1c330" },
+      { "path": "ui3/switch-off.png", "entry": "image_switch_off", "source_label": "src_4k", "size": 509, "sha256": "9dcf7d302486bfce3e856f4d3faf20a05f407f833a252c246fea0be09c14c60a" },
+      { "path": "ui3/switch-on.png", "entry": "image_switch_on", "source_label": "src_4k", "size": 379, "sha256": "31928ad932711f428ce9233ae238c86877f69a8d40ae5b41910453c6972911e0" },
+      { "path": "ui3/switch-base-highlight.png", "entry": "image_switch_base_highlight", "source_label": "src_4k", "size": 15910, "sha256": "e01802948b9a097713e64d1f31749ed0e1fae055adfd07e953ff6dfa5ec21d98" },
+      { "path": "ui3/switch-control-highlight.png", "entry": "image_switch_control_highlight", "source_label": "src_4k", "size": 2434, "sha256": "6d3950b6c13eb0cc1ac58662f2b1972075bc440c9f9df1791bf19de07d98738f" },
+      { "path": "ui3/progressbar-light.png", "entry": "image_progressbar_light", "source_label": "src_4k", "size": 3892, "sha256": "43cb8657cd06675990d5de703e0c1b2b2acd955d763936f1925e505443e93ce2" },
+      { "path": "ui3/busy-indicator-square.png", "entry": "image_busy_indicator_square", "source_label": "src", "size": 93462, "sha256": "a867a973e672d523f9e68ffe2fb718e206c4cbef92a17643c1a1fc8c7496b87e" },
+      { "path": "ui3/busy-indicator-horizontal.png", "entry": "image_busy_indicator_horizontal", "source_label": "src", "size": 21911, "sha256": "0c8b7ef4b437d3e375773a7a588db324807b3a663427f1ab77a603d5a044d3f2" },
+      { "path": "ui3/focus-noise.png", "entry": "image_focus_noise", "source_label": "src", "size": 4784, "sha256": "3c65c5f9ba935bc82afd5829b8c694710c77b4b8bd7210db4a16117f831f7b1e" },
+      { "path": "profile-icons/iconid_person_online.svg", "entry": "iconid_person_online", "source_label": "src", "source_size": 1249, "source_sha256": "a5f47f0d13ab4a9835e87dbdf1c36d6c7c9520bff2006da2f755b9e6fac844b0", "size": 1244, "sha256": "dc487840600d342fa41c5e54738212a5e4e3c45106bf9e0839f6ab5b33893064" },
+      { "path": "profile-icons/iconid_trophies.svg", "entry": "iconid_trophies", "source_label": "src", "source_size": 1290, "source_sha256": "effc435455430a238de133e9e0c744e7e2dddd6553579bbf484da1ad419aa706", "size": 1280, "sha256": "83fce42d12f2623e55e6abd0efb95fa1f724887d2fe78e336147bca58b6d6370" },
+      { "path": "profile-icons/iconid_person.svg", "entry": "iconid_person", "source_label": "src", "source_size": 986, "source_sha256": "b2c61581b38aa39390c80075656bd17547974449351b8d42f8fd849d61d7882a", "size": 981, "sha256": "0b8c6c09bfda3450d2d4ff48ef0d8128c151df45090b47135438d21c51dc4be0" },
+      { "path": "profile-icons/iconid_logout.svg", "entry": "iconid_logout", "source_label": "src", "source_size": 958, "source_sha256": "bbe7f19793f6be0e2fec881dc3fccbe75603e2ea9528366f7def95a9c36cc142", "size": 959, "sha256": "e529ee817731f6b2a9879c6dd560fc3029ca2c55221256714680fc2b21e2b088" },
+      { "path": "utility-icons/iconid_search.svg", "entry": "iconid_search", "source_label": "src", "source_size": 512, "source_sha256": "3d794839496e8e05ead9396ffe8a742ba3cba9a99b987919fd17dbc8bc9d35ca", "size": 513, "sha256": "169500498957603ddf33691fe046bc64fe45dc2a4af43553f221131b8d201b21" },
+      { "path": "utility-icons/iconid_notification_off.svg", "entry": "iconid_notification_off", "source_label": "src", "source_size": 1495, "source_sha256": "b30c33753436ebe18c36486b4f357c848e1ed9c616d029cfcb14cd6c87f33b60", "size": 1488, "sha256": "aaeb25e3548a687bd94e413507f72008a6122bdf1e300725f4461be25fa7f712" },
+      { "path": "utility-icons/iconid_new.svg", "entry": "iconid_new", "source_label": "src", "source_size": 666, "source_sha256": "4dadc92fd0e64578d113c55df351e29efaec56469a988acc1cf0f739e16f9847", "size": 659, "sha256": "36b8d277de689d60cd63574d14d52577974bc2178cbfa1627217d9e2f90176db" },
+      { "path": "system-icons/iconid_settings.svg", "entry": "iconid_settings", "source_label": "src", "source_size": 2322, "source_sha256": "a3c43ff1648789a79b67456bea663444f96ccb7f3c332900b271a1731b7bc303", "size": 2314, "sha256": "6ec431731c875bba6ecc19de5a740d39fec0ec413a81b5e75b06c1e7a944df2f" },
+      { "path": "system-icons/iconid_system.svg", "entry": "iconid_system", "source_label": "src", "source_size": 453, "source_sha256": "18c80a1ec35d6354439947ae0df6182a7d3af1427a48bc2b4673af8af44a1e1e", "size": 453, "sha256": "18c80a1ec35d6354439947ae0df6182a7d3af1427a48bc2b4673af8af44a1e1e" },
+      { "path": "system-icons/iconid_storage.svg", "entry": "iconid_storage", "source_label": "src", "source_size": 809, "source_sha256": "c314dd8e22699ffb0e672363a2eb70434f09820e2f65fa40bf7f5eab99cd385c", "size": 804, "sha256": "573a04a6af68acb0dc76030794269a2cce3d69bbc8e306e7e0165cd2c207cc10" },
+      { "path": "system-icons/iconid_control_play.svg", "entry": "iconid_control_play", "source_label": "src", "source_size": 558, "source_sha256": "09c73fe573fbd4269df6a2f402d84075319fa02b6d241fefac8615fdcd553d49", "size": 550, "sha256": "187fa04e905eb26c2a6d21f1c7119a0df6772d574bb834349b7453537e5db3d7" },
+      { "path": "system-icons/iconid_folder.svg", "entry": "iconid_folder", "source_label": "src", "source_size": 425, "source_sha256": "de575d95655544baa8a70be8301c3e18240dce3e8f57130aea294d31d833130e", "size": 425, "sha256": "de575d95655544baa8a70be8301c3e18240dce3e8f57130aea294d31d833130e" },
+      { "path": "system-icons/iconid_copy.svg", "entry": "iconid_copy", "source_label": "src", "source_size": 644, "source_sha256": "393b87042340ff159c281b45e6837159b31bc5c383746a62b8f7925235e02540", "size": 636, "sha256": "dcf0ea819021cf3c0f479feccf29200c108e0cda261ff535e62d3f66b80b266a" },
+      { "path": "system-icons/iconid_delete.svg", "entry": "iconid_delete", "source_label": "src", "source_size": 1364, "source_sha256": "3667a6289611508075378bd25c697890495e7ae19883e6d4bd344bfd2fedcd42", "size": 1356, "sha256": "a0328d40510e62a1a4dc84ca1c5b85f8f5993d955a1fc1c79e98203ce070f8a5" },
+      { "path": "system-icons/iconid_add_folder.svg", "entry": "iconid_add_folder", "source_label": "src", "source_size": 543, "source_sha256": "cf1ec8c13e52ae8411caaf1ee79801a40e5061349f34322c8fe0d6668faf4991", "size": 543, "sha256": "cf1ec8c13e52ae8411caaf1ee79801a40e5061349f34322c8fe0d6668faf4991" },
+      { "path": "system-icons/iconid_update.svg", "entry": "iconid_update", "source_label": "src", "source_size": 610, "source_sha256": "d5d93d444120f9df44446ae70cf31feee428554c950a1c4cf7f678af81fa4054", "size": 610, "sha256": "d5d93d444120f9df44446ae70cf31feee428554c950a1c4cf7f678af81fa4054" },
+      { "path": "system-icons/iconid_screen_and_video.svg", "entry": "iconid_screen_and_video", "source_label": "src", "source_size": 837, "source_sha256": "837b274f68c0b28f69a85c432859e8d9d7bf9b02ccd8428c3757e7fbb993c27c", "size": 827, "sha256": "620d79c1c70c08ffee46a7f2e1d6da4a5844c7666a2397de0b72199fd7ebf344" },
+      { "path": "system-icons/iconid_games_and_apps.svg", "entry": "iconid_games_and_apps", "source_label": "src", "source_size": 2762, "source_sha256": "f024e2422b9c2fb0d4fb8c968b70600c6d036a729b3ab69f8c996619dab7a28a", "size": 2752, "sha256": "4dbd5da6dfb5dabe72ef80c17606ff172ff8d243171b86dcb61e01599b8488ce" },
+      { "path": "system-icons/iconid_network.svg", "entry": "iconid_network", "source_label": "src", "source_size": 2734, "source_sha256": "63850d1d25bf28a4f83d50bf372b8ca78c3fa886957a0a4893389e9c44c14d83", "size": 2726, "sha256": "d741e1e630501bdd462f00b38cc7845525b16990b78b362a0bcb8b759a0d3c56" },
+      { "path": "system-icons/iconid_information.svg", "entry": "iconid_information", "source_label": "src", "source_size": 1121, "source_sha256": "67174b8dda535ced3ead4080ff40af339030d23e895323b785f75d2c98aa11cf", "size": 1113, "sha256": "84704fde6577605dde89d48a2f68ff7e77c9f5271a98abc2678ad7ad2c1e39e1" },
+      { "path": "system-icons/iconid_texture_app_fallback.svg", "entry": "iconid_texture_app_fallback", "source_label": "src", "size": 181112, "sha256": "d58160af1b1472c100e8354006787847467c54b721f50f44d20cd071f946db5f" }
+    ]
+  },
+  "standalone_runtime_closure": {
+    "source_container": "/system_ex/vsh_asset/Sce.PlayStation.PUI_UI3.rco",
+    "source_container_sha256": "62053f9ca86d19d470d568614692efe1970a729da72709907de9623c98138766",
+    "ui_sounds": {
+      "directory": "ui-sounds",
+      "count": 26,
+      "format": "pcm_s16le stereo 48000 Hz WAV decoded from named VAG entries",
+      "mapping": "ShellUiSounds.EntryNames"
+    },
+    "raster_icons": {
+      "directory": "ui3-raster",
+      "count": 20,
+      "selection": "15 keyguides at src_4k and 5 emoji entries at src",
+      "mapping": "ShellIcons.EntryNames"
+    },
+    "combined_derivative_index_sha256": "c7c127132b7a1303be52e928c3245c3aeac1470bfea66d342957ce832dea6265",
+    "verification": "PackagedShellDependencyTests requires every consumed cue and raster entry"
+  },
+  "assets": [
+    { "path": "background/patterns/length-table.bin", "offset": "0x00FF58A0", "size": 56, "sha256": "ddd1d2209a7fe28bc398650824f443b341a27005563d6abb64e5e8aa409020a4" },
+    { "path": "background/patterns/coldboot.bin", "offset": "0x00FF58E0", "size": 8106, "sha256": "3e35757bbab6287c666e79e1cb732a5e2e0ea9a9b85661921dbff3b40f723425" },
+    { "path": "background/patterns/spread_expanded.bin", "offset": "0x00FF7890", "size": 7669, "sha256": "86013b9b2d22bf66802530bcd8ea43c89ecf4f285fa713f2c4f3edd4242582df" },
+    { "path": "background/textures/light-volume.png", "source_offset": "0x010069E0", "source_size": 16640, "source_sha256": "2e2e733923112f289db75f3defe37fbb45cdc9c797759a374587b05324da1a68", "size": 9727, "sha256": "4e2c9f314961e0eac4a63d963115ff2e7da67d80659bc447483d87be4a07e19c", "rgba_sha256": "c07386258e9276a957c6e69247de62bdc5a2b2b49d2df40140808b688d3b797f", "dimensions": "128x128", "format": "lossless RGBA8 PNG decoded from tiled R8 GNF" },
+    { "path": "background/textures/light-floor.png", "source_offset": "0x0100AAE0", "source_size": 16640, "source_sha256": "dd8669c8cc1a9d8f6a44a59b9797c9f85fc648b82371332ef123f5573d45e25a", "size": 12376, "sha256": "bc477798cbad58ac8888aca54e7142b04f506219f8a7d1ce2f14253a6d110162", "rgba_sha256": "d5cef606bbe945c54beb2fa0fde9a70f0b53b7f95b166a2dfea70a385a550d7c", "dimensions": "128x128", "format": "lossless RGBA8 PNG decoded from tiled R8 GNF" },
+    { "path": "background/descriptors/light-texture.bin", "source_offsets": ["0x010069F0", "0x0100AAF0"], "size": 32, "sha256": "2bf20949e430bf15acdc30a6982bd6c7a987ba2028c8dd4ce4e85a9de4e811b7", "format": "shared Gen5 T# image descriptor template; image address is replaced at runtime" },
+    { "path": "background/shaders/rect_uv_vv.bin", "offset": "0x011EEE00", "size": 204, "sha256": "3dff78d60fe00e4cf542fefecbf0e2ebd39ab81cfc51fe3335c98448ec516bcf" },
+    { "path": "background/shaders/light_p.bin", "offset": "0x011F9700", "size": 2072, "sha256": "a9262053f63747e013aaaf1fd93d088486b77d11a87af9362e33d57ef3f19d3f" },
+    { "path": "background/shaders/particle_c.bin", "offset": "0x011FA100", "size": 29092, "sha256": "6c77e3476edc128dd00a91e52cf2b5b40f4c1f4fefc0ce7d80cd4a6bdd8e6384" },
+    { "path": "background/shaders/particle_p.bin", "offset": "0x01201500", "size": 2048, "declared_program_size": 1564, "sha256": "362f26cb03379bc3cfc1e38b31a241c41523a93b98a6cbd5d3823dafa65734e8" },
+    { "path": "background/shaders/particle_vv.bin", "offset": "0x01201D00", "size": 1792, "declared_program_size": 1276, "sha256": "2c27623d512217c614270f8b6396ccf4a84fb53d6d04481cb2229da861c9959e" },
+    { "path": "background/shaders/large_particle_p.bin", "offset": "0x01202400", "size": 1536, "declared_program_size": 1508, "sha256": "c2953663645afee9a5c14a9bf129bf1f6436da72ad0bbb8c6da5e433ce8df7d4" },
+    { "path": "background/shaders/large_particle_vv.bin", "offset": "0x01202C00", "size": 1536, "declared_program_size": 1120, "sha256": "952ddd2d21cc2188d11dfeb793b13b7661f1d71121cff701377d3f24ca58dbf4" },
+    { "path": "background/colors/boot-color-cb.bin", "source": "WaveColourPreset[11]", "size": 124, "sha256": "cb99cbbd56044ce2533948bc8c1f249504fdae3feb2f0d73c26ea69b58c26834" },
+    { "path": "background/colors/login-color-cb.bin", "source": "WaveColourPreset[9]", "size": 124, "sha256": "0fc9e53f23407c2136b28664faf6f7554fe6a58f94604f301f265c8da5248432" },
+    { "path": "background/colors/home-color-cb.bin", "source": "WaveColourPreset[4]", "size": 124, "sha256": "6707722e5d33ca4c86025036bc1a781ab851612bc348a936186409450969c631" }
+  ],
+  "excluded": [
+    "the complete eboot",
+    "cis_ac_model.wad",
+    "shutdown_ramp.gnf",
+    "shutdown_lightbar.fbxd",
+    "diffuse_default.gnf"
+  ]
+}

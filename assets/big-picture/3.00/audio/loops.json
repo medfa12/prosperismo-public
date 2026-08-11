@@ -1,0 +1,12 @@
+{
+  "bgm_home.wav": {
+    "sample_rate": 48000,
+    "start_frame": 278612,
+    "end_frame": 9417257
+  },
+  "bgm_onboarding.wav": {
+    "sample_rate": 48000,
+    "start_frame": 1298113,
+    "end_frame": 6579824
+  }
+}

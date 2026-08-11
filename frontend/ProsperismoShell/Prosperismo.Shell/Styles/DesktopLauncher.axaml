@@ -1,0 +1,415 @@
+
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Prosperismo.GUI">
+
+  <Style Selector="Grid.desktopLauncher">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Grid#MainContent">
+    <!-- Public desktop mesh: 42px page margin and 14px component gutter. -->
+    <Setter Property="Margin" Value="42,28" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher Border.psHero">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.AccentGradient}" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="28,21" />
+    <Setter Property="BoxShadow" Value="0 7 21 0 #29000000" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBlock.psOverline">
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="1.2" />
+    <Setter Property="Foreground" Value="#CCFFFFFF" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBlock.psHeroTitle">
+    <Setter Property="FontSize" Value="34" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="LetterSpacing" Value="-0.1" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBlock.psHeroBody">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="#D9FFFFFF" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Border.psBrandMark">
+    <Setter Property="Background" Value="#20FFFFFF" />
+    <Setter Property="BorderBrush" Value="#52FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+  </Style>
+
+  <!-- Tertiary navigation: 14px medium type, transparent 2px shell and a
+       rounded active surface, matching the observed 1280px web branch. -->
+  <Style Selector="Grid.desktopLauncher Border.psActiveTab">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="24" />
+    <Setter Property="Padding" Value="12,6" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Border.psActiveTab TextBlock">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psHeroTab">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="24" />
+    <Setter Property="Padding" Value="12,6" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psHeroTab:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#26FFFFFF" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <!-- CTA shell: a permanent transparent 2px outer border means hover/focus
+       never changes layout geometry. -->
+  <Style Selector="Grid.desktopLauncher Button.psHeroCta">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="24" />
+    <Setter Property="Padding" Value="14,10" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkBase}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psHeroCta:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageTertiary}" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkHover}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psHeroCta:focus">
+    <Setter Property="BorderBrush" Value="White" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher Border.psSurface">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.ContentGradient}" />
+    <Setter Property="BorderBrush" Value="#99FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="BoxShadow" Value="0 4 14 0 #14000000" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBlock.psSectionTitle">
+    <Setter Property="FontSize" Value="22" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBlock.psUtility">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+  </Style>
+
+  <!-- Content pills and primary CTA variants. -->
+  <Style Selector="Grid.desktopLauncher Button.psPill">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageTertiary}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPill:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#FFF2F2F2" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkHover}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPill:focus">
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.LinkBase}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPill:disabled">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="#FF7A8491" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPill:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="#FF7A8491" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPrimary">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.LinkBase}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPrimary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.LinkHover}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPrimary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.LinkActive}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.psPrimary:focus">
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Focus}" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher TextBox.psSearch">
+    <Setter Property="MinHeight" Value="42" />
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="24" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource Ps.Brush.LinkBase}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBox.psSearch:focus">
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.LinkBase}" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher Button.desktopTableHeader">
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Padding" Value="7,8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Button.desktopTableHeader:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageTertiary}" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkHover}" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher ListBox.psGameList">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="7" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher ListBox.psGameList ListBoxItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0,0,0,7" />
+    <Setter Property="CornerRadius" Value="12" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher ListBox.psGameList ListBoxItem:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Border.psGameRow">
+    <Setter Property="Background" Value="#F2FFFFFF" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="3" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="11,8" />
+    <Setter Property="BoxShadow" Value="0 2 7 0 #14000000" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Border.psGameRow:pointerover">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BoxShadow" Value="0 7 14 0 #29000000" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher ListBox.psGameList ListBoxItem:selected Border.psGameRow">
+    <Setter Property="Background" Value="#FFF0F7FC" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.LinkBase}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher Border.psMedia">
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Setter Property="BoxShadow" Value="0 4 7 0 #29000000" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher TextBox.psComment">
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Grid.desktopLauncher ComboBox.psStatus">
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+
+  <Style Selector="Grid.desktopLauncher Border.psFooter">
+    <Setter Property="Background" Value="#BFFFFFFF" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Padding" Value="10,7" />
+  </Style>
+
+  <!-- Popup roots are detached, so desktopContext is the explicit isolation
+       class instead of an ancestor selector. -->
+  <Style Selector="ContextMenu.desktopContext">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="MinWidth" Value="240" />
+    <Setter Property="MaxWidth" Value="360" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="MaxHeight" Value="600" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="ContextMenu.desktopContext /template/ Border">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="BoxShadow" Value="0 7 21 0 #3D000000" />
+  </Style>
+  <Style Selector="ContextMenu.desktopContext MenuItem">
+    <Setter Property="Padding" Value="10,6" />
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="ContextMenu.desktopContext MenuItem:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageTertiary}" />
+  </Style>
+  <Style Selector="ContextMenu.desktopContext Separator">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Margin" Value="7,4" />
+  </Style>
+
+  <!-- Desktop settings windows are detached from MainWindow, so the explicit
+       psDesktopDialog class is their isolation boundary. Per-game settings
+       receive it only when opened from desktop mode. -->
+  <Style Selector="Window.psDesktopDialog">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Border.psDesktopCard">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PagePrimary}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="BoxShadow" Value="0 7 21 0 #29000000" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Border.card">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.ContentGradient}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="16" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TextBlock.sectionTitle">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog local|SettingRow TextBlock#PART_Label">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.ghost">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageTertiary}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#FFF2F2F2" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkHover}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.ghost:disabled">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="#FF7A8491" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.ghost:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="#FF7A8491" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.accent">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.LinkBase}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="16,8" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.LinkHover}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabControl">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabItem">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Padding" Value="12,8" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabItem:selected">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.LinkBase}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabControl:disabled">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabItem:disabled">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TabItem:disabled /template/ ContentPresenter">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog TextBox">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ComboBox">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ComboBox:disabled">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ComboBox:disabled /template/ ContentPresenter">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ComboBox:disabled /template/ TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog NumericUpDown">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog NumericUpDown:disabled">
+    <Setter Property="Background" Value="{DynamicResource Ps.Brush.PageSecondary}" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ToggleSwitch">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ToggleSwitch /template/ ContentPresenter">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ToggleSwitch:disabled">
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextSecondary}" />
+    <Setter Property="Opacity" Value="0.72" />
+  </Style>
+  <Style Selector="Window.psDesktopDialog ListBox.psDialogList">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Ps.Brush.Border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Ps.Brush.TextPrimary}" />
+  </Style>
+</Styles>

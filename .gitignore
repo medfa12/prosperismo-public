@@ -1,0 +1,40 @@
+# Visual Studio 2015 cache/options directory
+.vs/
+.idea/
+build/
+_Build/vscode-clang/
+_Build/
+/artifacts/
+/docs/
+
+# Local, legally obtained title data and runtime state. Never distribute it.
+/games/**
+
+# Local Sony SDK, firmware, symbols, dumps and research inputs. The tracked
+# README records the contract; every oracle payload remains outside Git.
+/ps5oracle/**
+/ps5oracle*.zip
+
+# Local Python verifier bytecode.
+__pycache__/
+
+# Emulator-local output.
+/run-logs/
+/shader_cache/
+
+# One-off standalone validation artifacts for the native Plane2 port. The
+# checked-in implementation is under frontend/ProsperismoLauncher/windows.
+/FirstWaveBackground.obj
+/NativeWavePlate.obj
+/NativeWavePlatePreview.obj
+/NativeWavePlate.preview.*
+/tools/FirstWavePlatePreview.exe
+/tools/NativeWavePlatePreview.exe
+
+# macOS Finder metadata.
+.DS_Store
+**/.DS_Store
+
+# Frames and video rendered from Sony's own shaders: derived firmware output,
+# same rule as ps5oracle.
+/out/

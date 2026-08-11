@@ -1,0 +1,311 @@
+<!--
+Copyright (C) 2026 Prosperismo Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Prosperismo.GUI.Controls.DesktopLibrarySurface">
+  <!--
+    The desktop route retains the complete Kyty configuration-list contract,
+    but presents it through the public PlayStation web design-system grammar:
+    open-font typography, a 42/14 mesh, tertiary tabs, pill actions, layered cards, square
+    media, and an out-of-layout selection ring. No web artwork is bundled.
+  -->
+  <Grid Classes="psDesktopPage"
+        RowDefinitions="Auto,Auto,*,Auto"
+        RowSpacing="14">
+
+    <!-- Accent-gradient hero and tertiary navigation. -->
+    <Border Grid.Row="0" Classes="psHero">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="28">
+        <Grid Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="14">
+          <Border Grid.Column="0"
+                  Classes="psBrandMark"
+                  Width="56" Height="56"
+                  VerticalAlignment="Top">
+            <Image Source="avares://Prosperismo.Shell/Assets/Prosperismo.ico"
+                   Width="34" Height="34"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapInterpolationMode="HighQuality" />
+          </Border>
+          <StackPanel Grid.Column="1" Spacing="4">
+            <TextBlock Classes="psOverline" Text="PROSPERISMO · DESKTOP LAUNCHER" />
+            <TextBlock Classes="psHeroTitle" Text="Your game library" />
+            <TextBlock Classes="psHeroBody"
+                       Text="Manage installed titles, compatibility notes, and emulator profiles."
+                       TextWrapping="Wrap" />
+            <StackPanel Orientation="Horizontal" Spacing="7" Margin="0,10,0,0">
+              <Border Classes="psActiveTab">
+                <TextBlock Text="Library" />
+              </Border>
+              <Button x:Name="DesktopGlobalSettingsButton"
+                      Classes="psHeroTab"
+                      Content="Settings"
+                      ToolTip.Tip="Edit global settings and game folders"
+                      Click="OnGlobalSettingsClicked" />
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Spacing="7">
+          <Button x:Name="DesktopBigPictureButton"
+                  Classes="psHeroCta"
+                  Content="Open Big Picture"
+                  MinWidth="156"
+                  ToolTip.Tip="Open the controller-first PlayStation presentation"
+                  Click="OnBigPictureClicked" />
+          <TextBlock Text="Controller-first mode"
+                     FontSize="10"
+                     Foreground="#BFFFFFFF"
+                     HorizontalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Search and operational actions retain the Qt launcher behavior. -->
+    <Border Grid.Row="1" Classes="psSurface" Padding="14">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="14">
+          <TextBox x:Name="DesktopSearchBox"
+                   Grid.Column="0"
+                   Classes="psSearch"
+                   MaxWidth="420"
+                   HorizontalAlignment="Stretch"
+                   Watermark="Search name or serial"
+                   ToolTip.Tip="Search game name or serial" />
+          <StackPanel Grid.Column="1"
+                      Orientation="Horizontal"
+                      Spacing="7"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center">
+            <Button x:Name="DesktopAddFolderButton"
+                    Classes="psPrimary desktopAction"
+                    Content="Add folder"
+                    MinWidth="98"
+                    Click="OnAddFolderClicked" />
+            <Button x:Name="DesktopRescanButton"
+                    Classes="psPill desktopAction"
+                    Content="Rescan"
+                    MinWidth="82"
+                    Click="OnRescanClicked" />
+            <Button x:Name="DesktopOpenFileButton"
+                    Classes="psPill desktopAction"
+                    Content="Open file…"
+                    MinWidth="98"
+                    Click="OnOpenFileClicked" />
+          </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Layered card surface: separate table header, game-card media, and a
+         permanent 3px transparent selection shell whose color changes without
+         changing geometry. -->
+    <Border Grid.Row="2" Classes="psSurface">
+      <Grid RowDefinitions="Auto,Auto,*">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="14"
+              Margin="21,14,14,10">
+          <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
+            <TextBlock Classes="psSectionTitle" Text="Installed games" />
+            <TextBlock Classes="psUtility"
+                       Text="Select a title to edit its profile, or double-click to launch." />
+          </StackPanel>
+          <StackPanel Grid.Column="1"
+                      Orientation="Horizontal"
+                      Spacing="7"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center">
+            <Button x:Name="DesktopGameSettingsButton"
+                    Classes="psPill desktopAction"
+                    Content="Edit game settings"
+                    Click="OnEditCustomSettingsClicked" />
+            <Button x:Name="DesktopClearCustomSettingsButton"
+                    Classes="psPill desktopAction"
+                    Content="Clear custom settings"
+                    IsEnabled="False"
+                    Click="OnClearCustomSettingsClicked" />
+          </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1"
+                Background="{DynamicResource Ps.Brush.PageSecondary}"
+                BorderBrush="{DynamicResource Ps.Brush.Border}"
+                BorderThickness="0,0,0,1"
+                Padding="14,5">
+          <Grid ColumnDefinitions="2.5*,1*,1.1*,1.3*,2.4*,1.2*,1.6*"
+                ColumnSpacing="8"
+                MinHeight="34">
+            <Button Grid.Column="0" Classes="desktopTableHeader" Content="Game  ↕" Tag="0"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="1" Classes="desktopTableHeader" Content="Serial  ↕" Tag="1"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="2" Classes="desktopTableHeader" Content="Game version  ↕" Tag="2"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="3" Classes="desktopTableHeader" Content="Firmware  ↕" Tag="3"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="4" Classes="desktopTableHeader" Content="Path  ↕" Tag="4"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="5" Classes="desktopTableHeader" Content="Status  ↕" Tag="5"
+                    Click="OnSortHeaderClicked" />
+            <Button Grid.Column="6" Classes="desktopTableHeader" Content="Comments  ↕" Tag="6"
+                    Click="OnSortHeaderClicked" />
+          </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+          <ListBox x:Name="DesktopGames"
+                   Classes="psGameList"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                   DoubleTapped="OnGamesDoubleTapped">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Border Classes="psGameRow" MinHeight="62">
+                  <Grid ColumnDefinitions="2.5*,1*,1.1*,1.3*,2.4*,1.2*,1.6*"
+                        ColumnSpacing="8">
+                    <Grid Grid.Column="0" ColumnDefinitions="46,*" ColumnSpacing="10">
+                      <Border Grid.Column="0"
+                              Classes="psMedia"
+                              Width="44" Height="44"
+                              Background="{Binding PlaceholderBrush}">
+                        <Grid>
+                          <TextBlock Text="{Binding Initials}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     FontSize="10"
+                                     FontWeight="SemiBold"
+                                     Foreground="White" />
+                          <Image Source="{Binding Cover}"
+                                 Stretch="UniformToFill"
+                                 IsVisible="{Binding HasCover}" />
+                        </Grid>
+                      </Border>
+                      <TextBlock Grid.Column="1"
+                                 Text="{Binding Name}"
+                                 VerticalAlignment="Center"
+                                 TextTrimming="CharacterEllipsis"
+                                 FontSize="12"
+                                 FontWeight="SemiBold"
+                                 Foreground="{DynamicResource Ps.Brush.TextPrimary}" />
+                    </Grid>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding TitleId}"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="11"
+                               Foreground="{DynamicResource Ps.Brush.TextSecondary}" />
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding Version}"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               Foreground="{DynamicResource Ps.Brush.TextSecondary}" />
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding FirmwareVersion, FallbackValue=—}"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               Foreground="{DynamicResource Ps.Brush.TextSecondary}" />
+                    <TextBlock Grid.Column="4"
+                               Text="{Binding Path}"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="11"
+                               Foreground="{DynamicResource Ps.Brush.TextSecondary}"
+                               ToolTip.Tip="{Binding Path}" />
+                    <Grid Grid.Column="5" ColumnDefinitions="10,*" ColumnSpacing="5">
+                      <Ellipse Width="8" Height="8"
+                               Fill="{Binding CompatibilityStatusColor}"
+                               VerticalAlignment="Center" />
+                      <ComboBox Grid.Column="1"
+                                Classes="psStatus"
+                                VerticalAlignment="Center"
+                                MinWidth="102"
+                                FontSize="11"
+                                SelectedIndex="{Binding CompatibilityStatusIndex, Mode=TwoWay}"
+                                SelectionChanged="OnStatusChanged">
+                        <ComboBoxItem Content="Unknown" />
+                        <ComboBoxItem Content="Main menu" />
+                        <ComboBoxItem Content="In game" />
+                        <ComboBoxItem Content="Logo" />
+                        <ComboBoxItem Content="Doesn't boot" />
+                      </ComboBox>
+                    </Grid>
+                    <TextBox Grid.Column="6"
+                             Classes="psComment"
+                             VerticalAlignment="Center"
+                             FontSize="11"
+                             Watermark="Add comment"
+                             Text="{Binding Comment, Mode=TwoWay}"
+                             LostFocus="OnCommentLostFocus" />
+
+                    <Grid.ContextMenu>
+                      <ContextMenu Classes="desktopContext"
+                                   DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
+                                   Opened="OnGameContextMenuOpened">
+                        <MenuItem Header="Run" Click="OnRunContextAction" />
+                        <MenuItem Header="Open game folder" Click="OnOpenGameFolderContextAction" />
+                        <MenuItem Header="View trophies…" Click="OnViewTrophiesContextAction" />
+                        <MenuItem Header="Patches (experimental)…" Click="OnPatchesContextAction" />
+                        <MenuItem Header="Remove save data…" Click="OnRemoveSaveDataContextAction" />
+                        <Separator />
+                        <MenuItem Header="Edit game settings…" Click="OnEditCustomSettingsContextAction" />
+                        <MenuItem Header="Clear custom settings" Click="OnClearCustomSettingsContextAction" />
+                      </ContextMenu>
+                    </Grid.ContextMenu>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <StackPanel x:Name="DesktopEmptyState"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Spacing="8"
+                      IsVisible="False"
+                      MaxWidth="360">
+            <TextBlock Text="No configurations found"
+                       HorizontalAlignment="Center"
+                       FontSize="22"
+                       FontWeight="Light"
+                       Foreground="{DynamicResource Ps.Brush.TextPrimary}" />
+            <TextBlock Text="Add a game folder or open a game file to populate the configuration list."
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Foreground="{DynamicResource Ps.Brush.TextSecondary}" />
+            <Button x:Name="DesktopEmptyAddFolderButton"
+                    Classes="psPrimary"
+                    Content="Add game folder"
+                    HorizontalAlignment="Center"
+                    Margin="0,7,0,0"
+                    Click="OnAddFolderClicked" />
+          </StackPanel>
+        </Grid>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="3" Classes="psFooter">
+      <Grid ColumnDefinitions="1.2*,1.2*,Auto" ColumnSpacing="14">
+        <TextBlock x:Name="DesktopSettingsFileText"
+                   Grid.Column="0"
+                   Text="Settings file: locating…"
+                   Classes="psUtility"
+                   TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="DesktopEmulatorText"
+                   Grid.Column="1"
+                   Text="Emulator: locating…"
+                   Classes="psUtility"
+                   TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="DesktopVersionText"
+                   Grid.Column="2"
+                   Text="Version: unknown"
+                   Classes="psUtility"
+                   TextTrimming="CharacterEllipsis" />
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

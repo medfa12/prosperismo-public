@@ -1,0 +1,16 @@
+{
+  "firmware_version": "3.20",
+  "source": {
+    "path": "/system_ex/common_ex/lib/libScePsm.sprx",
+    "size": 5428268,
+    "sha256": "1ba32a427a2fd6260573508527b46c50738d2d0d38d980a9981742bb8de45cfd"
+  },
+  "extraction": "recovered program slices translated once to host-portable SPIR-V by the Prosperismo Gen5 translator",
+  "assets": [
+    { "path": "focus/area-vv.spv", "source_offset": "0x4B0550", "size": 26428, "sha256": "3b79aa9ec0c3fda460d2ee280e91c0ed7464c16a2af31630c59e65c6fbc5b3c8", "format": "SPIR-V 1.6" },
+    { "path": "focus/line-vv.spv", "source_offset": "0x4B1050", "size": 28748, "sha256": "92cde0aa363863b6adb5d881829db3ad679a4c73836a1b5c2da2e701da1ffce9", "format": "SPIR-V 1.6" },
+    { "path": "focus/area-p.spv", "source_offset": "0x4F0650", "size": 106324, "sha256": "9a6cb05ce1c3d1989e696277c7705c23679e966182c905d48f1a5704d335f415", "format": "SPIR-V 1.6" },
+    { "path": "focus/line-p.spv", "source_offset": "0x4F1BD0", "size": 123364, "sha256": "6a15c82acf19173ac39e610c352bbc8e32d58c81f30d6f2560e623d96b910c17", "format": "SPIR-V 1.6" }
+  ],
+  "consumer": "frontend/ProsperismoShell/Prosperismo.Shell/Ps5Home/Ps5NativeFocusRuntime.cs"
+}
